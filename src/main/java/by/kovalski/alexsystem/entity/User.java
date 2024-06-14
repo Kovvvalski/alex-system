@@ -1,11 +1,23 @@
 package by.kovalski.alexsystem.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
+@Table(name = "users")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends AbstractPerson {
-  private Role role;
 
+  @Column(name = "login")
+  private String login;
+
+  @Column(name = "password")
+  private String password;
+
+  @Column(name = "role")
+  @Enumerated(EnumType.STRING)
+  private Role role;
 }

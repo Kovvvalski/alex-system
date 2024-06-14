@@ -1,22 +1,29 @@
 package by.kovalski.alexsystem.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
+@Table(name = "groups")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Group {
+
   @Id
   private String name;
 
   @ManyToOne
+  @JoinColumn(name = "course_name")
   private Course course;
 
-  @ManyToMany
+  @ManyToMany(mappedBy = "groups")
   private List<Student> students;
+
+  @OneToMany(mappedBy = "group")
+  private List<Lesson> lessons;
 }
