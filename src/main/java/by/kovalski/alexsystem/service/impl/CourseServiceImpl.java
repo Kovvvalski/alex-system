@@ -21,24 +21,28 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public Course findByName(String name) throws ServiceException {
-    Course course = courseRepository.findByName(name);
-    if(course == null){
-      throw new ServiceException("No course with name " + name);
-    }
-    return course;
+    return courseRepository.findById(name).orElseThrow(() -> new ServiceException("No course with name " + name));
   }
 
   @Override
   public List<Course> findAll() throws ServiceException {
     List<Course> courses = courseRepository.findAll();
-    if(courses.isEmpty()){
+    if (courses.isEmpty()) {
       throw new ServiceException("Repository is empty");
     }
     return courses;
   }
 
   @Override
-  public void save(Course course) {
+  public void save(Course course) throws ServiceException {
+    if (courseRepository.existsById(course.getName())) {
+      throw new ServiceException("Course with name " + course.getName() + " already exists");
+    }
     courseRepository.saveAndFlush(course);
+  }
+
+  @Override
+  public void deleteByName(String name) {
+    courseRepository.deleteById(name);
   }
 }

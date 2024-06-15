@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${group.name}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            margin-top: 50px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Group <span th:text="${group.name}"></span> info</h1>
+            <p>Course:
+                <a th:href="@{/admin/course/{name}(name=${group.course.name})}" th:text="${group.course.name}"/>
+            </p>
+            <p>Status: <span th:text="${group.status}"></span></p>
+        </div>
+        <div class="col-md-3">
+            <h3>Students</h3>
+            <ul>
+                <li th:each="student : ${group.students}">
+                    <span th:text="${student.firstName}"></span> <span th:text="${student.secondName}"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-3">
+            <h3>Lessons</h3>
+            <ul>
+                <li th:each="lesson : ${group.lessons}" th:text="${lesson.begin}"></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

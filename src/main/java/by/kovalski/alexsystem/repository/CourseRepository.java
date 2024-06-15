@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, String> {
-  Course findByName(String name) throws ServiceException;
+  Course findByName(String name);
 }

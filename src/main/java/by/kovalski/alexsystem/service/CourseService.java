@@ -10,5 +10,7 @@ public interface CourseService {
 
   List<Course> findAll() throws ServiceException;
 
-  void save(Course course);
+  void save(Course course) throws ServiceException;
+
+  void deleteByName(String name) throws ServiceException;
 }

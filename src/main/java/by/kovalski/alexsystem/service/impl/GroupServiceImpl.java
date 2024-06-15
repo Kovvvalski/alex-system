@@ -4,6 +4,7 @@ import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
+import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.repository.GroupRepository;
 import by.kovalski.alexsystem.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import java.util.List;
 @Service
 public class GroupServiceImpl implements GroupService {
   private final GroupRepository groupRepository;
+  private final CourseRepository courseRepository;
 
   @Autowired
-  public GroupServiceImpl(GroupRepository groupRepository) {
+  public GroupServiceImpl(GroupRepository groupRepository, CourseRepository courseRepository) {
     this.groupRepository = groupRepository;
+    this.courseRepository = courseRepository;
   }
 
   @Override
@@ -41,15 +44,19 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public Group findByName(String name) throws ServiceException {
-    Group group = groupRepository.findByName(name);
-    if (group == null) {
-      throw new ServiceException("No group with name " + name);
-    }
-    return group;
+    return groupRepository.findById(name).orElseThrow(() -> new ServiceException("No group with name " + name));
   }
 
   @Override
-  public void save(Group group) {
+  public void save(Group group) throws ServiceException {
+    List<Course> courses = courseRepository.findAll();
+    if (courses.stream().noneMatch(course -> course.getName().equals(group.getCourse().getName()))) {
+      throw new ServiceException("No course with name " + group.getCourse().getName());
+    }
+
+    if (groupRepository.existsById(group.getName())) {
+      throw new ServiceException("Group with name " + group.getName() + " already exists");
+    }
     groupRepository.saveAndFlush(group);
   }
 

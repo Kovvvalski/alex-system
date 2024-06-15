@@ -5,8 +5,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends AbstractPerson {
