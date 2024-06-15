@@ -30,4 +30,8 @@ public abstract class AbstractPerson {
 
   @Column(name = "email")
   private String email;
+
+  @Column(name = "status")
+  @Enumerated(EnumType.STRING)
+  private Status status;
 }

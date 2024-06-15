@@ -26,4 +26,8 @@ public class Group {
 
   @OneToMany(mappedBy = "group")
   private List<Lesson> lessons;
+
+  @Column(name = "status")
+  @Enumerated(EnumType.STRING)
+  private Status status;
 }

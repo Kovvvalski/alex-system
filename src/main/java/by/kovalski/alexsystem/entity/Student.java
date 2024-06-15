@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,17 +29,4 @@ public class Student extends AbstractPerson {
 
   @OneToMany(mappedBy = "student")
   private List<Activity> activities;
-
-  @Transient
-  private List<Lesson> lessons;
-
-  public List<Lesson> getLessons(){
-    if(lessons == null) {
-      lessons = new ArrayList<>();
-      for(Group group : groups) {
-        lessons.addAll(group.getLessons());
-      }
-    }
-    return lessons;
-  }
 }

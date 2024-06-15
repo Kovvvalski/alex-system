@@ -32,4 +32,8 @@ public class Lesson {
   @ManyToOne
   @JoinColumn(name = "lecturer_id")
   private Lecturer lecturer;
+
+  @OneToOne
+  @JoinColumn(name = "home_task_id")
+  private HomeTask homeTask;
 }
