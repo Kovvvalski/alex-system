@@ -1,6 +1,7 @@
 package by.kovalski.alexsystem.service.impl;
 
 import by.kovalski.alexsystem.entity.Course;
+import by.kovalski.alexsystem.exception.ImpossibleRemoveException;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.service.CourseService;
@@ -25,12 +26,8 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public List<Course> findAll() throws ServiceException {
-    List<Course> courses = courseRepository.findAll();
-    if (courses.isEmpty()) {
-      throw new ServiceException("Repository is empty");
-    }
-    return courses;
+  public List<Course> findAll() {
+    return courseRepository.findAll();
   }
 
   @Override
@@ -42,7 +39,11 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public void deleteByName(String name) {
-    courseRepository.deleteById(name);
+  public void deleteByName(String name) throws ServiceException{
+    try {
+      courseRepository.deleteById(name);
+    } catch (ImpossibleRemoveException e) {
+      throw new ServiceException(e.getMessage(), e);
+    }
   }
 }

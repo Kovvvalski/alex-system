@@ -24,22 +24,14 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public List<Group> findAll() throws ServiceException {
-    List<Group> groups = groupRepository.findAll();
-    if (groups.isEmpty()) {
-      throw new ServiceException("No groups in repository");
-    }
-    return groups;
+  public List<Group> findAll() {
+    return groupRepository.findAll();
   }
 
   @Override
-  public List<Group> findAllActive() throws ServiceException {
+  public List<Group> findAllActive() {
     List<Group> groups = findAll();
-    List<Group> filtered = groups.stream().filter(group -> group.getStatus() == Status.ACTIVE).toList();
-    if (filtered.isEmpty()) {
-      throw new ServiceException("No active groups in repository");
-    }
-    return filtered;
+    return groups.stream().filter(group -> group.getStatus() == Status.ACTIVE).toList();
   }
 
   @Override
@@ -49,8 +41,7 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public void save(Group group) throws ServiceException {
-    List<Course> courses = courseRepository.findAll();
-    if (courses.stream().noneMatch(course -> course.getName().equals(group.getCourse().getName()))) {
+    if (!courseRepository.existsById(group.getCourse().getName())) {
       throw new ServiceException("No course with name " + group.getCourse().getName());
     }
 
@@ -61,11 +52,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public List<Group> findAllByCourse(Course course) throws ServiceException {
-    List<Group> groups = groupRepository.findAllByCourse(course);
-    if (groups.isEmpty()) {
-      throw new ServiceException("No groups on course " + course.getName());
-    }
-    return groups;
+  public List<Group> findAllByCourse(Course course) {
+    return groupRepository.findAllByCourse(course);
   }
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Main</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/admin_header :: admin_header}"></div>
+<div class="container my-5">
+  <h1 class="mb-4">Admin main page</h1>
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <a th:href="@{/admin/lecturers}" class="btn btn-primary btn-block">
+        <i class="fas fa-users"></i> Lecturers
+      </a>
+    </div>
+    <div class="col-md-4 mb-4">
+      <a th:href="@{/admin/groups}" class="btn btn-primary btn-block">
+        <i class="fas fa-users"></i> Groups
+      </a>
+    </div>
+    <div class="col-md-4 mb-4">
+      <a th:href="@{/admin/courses}" class="btn btn-primary btn-block">
+        <i class="fas fa-book"></i> Courses
+      </a>
+    </div>
+    <div class="col-md-4 mb-4">
+      <a th:href="@{/admin/students}" class="btn btn-primary btn-block">
+        <i class="fas fa-users"></i> Students
+      </a>
+    </div>
+    <div class="col-md-4 mb-4">
+      <a th:href="@{/admin/parents}" class="btn btn-primary btn-block">
+        <i class="fas fa-users"></i> Parents
+      </a>
+    </div>
+  </div>
+
+
+</div>
+</body>
+</html>

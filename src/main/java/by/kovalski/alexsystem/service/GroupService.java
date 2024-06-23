@@ -10,11 +10,11 @@ public interface GroupService {
 
   Group findByName(String name) throws ServiceException;
 
-  List<Group> findAllByCourse(Course course) throws ServiceException;
+  List<Group> findAllByCourse(Course course);
 
-  List<Group> findAll() throws ServiceException;
+  List<Group> findAll();
 
-  List<Group> findAllActive() throws ServiceException;
+  List<Group> findAllActive();
 
   void save(Group group) throws ServiceException;
 }

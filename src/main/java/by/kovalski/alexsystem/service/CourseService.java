@@ -8,7 +8,7 @@ import java.util.List;
 public interface CourseService {
   Course findByName(String name) throws ServiceException;
 
-  List<Course> findAll() throws ServiceException;
+  List<Course> findAll();
 
   void save(Course course) throws ServiceException;
 

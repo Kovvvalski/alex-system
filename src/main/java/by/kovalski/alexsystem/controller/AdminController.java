@@ -5,6 +5,9 @@ import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.service.CourseService;
 import by.kovalski.alexsystem.service.GroupService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static by.kovalski.alexsystem.controller.util.Attributes.*;
 import static by.kovalski.alexsystem.controller.util.Pages.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,15 +34,14 @@ public class AdminController {
     this.groupService = groupService;
   }
 
+  @GetMapping("/admin")
+  public String admin_main(){
+    return "admin_main";
+  }
+
   @GetMapping("/admin/courses")
   public String courses(Model model) {
-    List<Course> courses;
-    try {
-      courses = courseService.findAll();
-    } catch (ServiceException e) {
-      logger.warn(e.getMessage());
-      courses = new ArrayList<>();
-    }
+    List<Course> courses = courseService.findAll();
     model.addAttribute(COURSES, courses);
     model.addAttribute(COURSE, new Course());
     return ADMIN_COURSES;
@@ -58,44 +59,33 @@ public class AdminController {
   }
 
   @GetMapping("admin/course/{name}")
-  public String course(Model model, @PathVariable String name){
+  public String course(Model model, @PathVariable String name) {
     Course course;
     try {
       course = courseService.findByName(name);
-    } catch (ServiceException e){
+    } catch (ServiceException e) {
       return ERROR_PAGE;
     }
     model.addAttribute(COURSE, course);
     return ADMIN_COURSE;
   }
 
-  @PostMapping("/admin/courses/delete/{name}")
-  public String deleteCourse(@PathVariable String name) {
+  @PostMapping("/admin/course/delete/{name}")
+  public String deleteCourse(@PathVariable String name, RedirectAttributes redirectAttributes) {
     try {
       courseService.deleteByName(name);
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/course/" + name;
     }
     return "redirect:/admin/courses";
   }
 
   @GetMapping("/admin/groups")
-  public String groups(Model model){
-    List<Group> groups;
-    List<Course> courses;
-    try {
-      groups = groupService.findAll();
-    } catch (ServiceException e) {
-      logger.warn(e.getMessage());
-      groups = new ArrayList<>();
-    }
-    try {
-      courses = courseService.findAll();
-    } catch (ServiceException e) {
-      logger.warn(e.getMessage());
-      courses = new ArrayList<>();
-    }
-
+  public String groups(Model model) {
+    List<Group> groups = groupService.findAll();
+    List<Course> courses = courseService.findAll();
     model.addAttribute(GROUPS, groups);
     model.addAttribute(GROUP, new Group());
     model.addAttribute(COURSES, courses);
@@ -114,11 +104,11 @@ public class AdminController {
   }
 
   @GetMapping("admin/group/{name}")
-  public String group(Model model, @PathVariable String name){
+  public String group(Model model, @PathVariable String name) {
     Group group;
     try {
       group = groupService.findByName(name);
-    } catch (ServiceException e){
+    } catch (ServiceException e) {
       return ERROR_PAGE;
     }
     model.addAttribute(GROUP, group);
