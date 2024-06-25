@@ -55,4 +55,22 @@ public class GroupServiceImpl implements GroupService {
   public List<Group> findAllByCourse(Course course) {
     return groupRepository.findAllByCourse(course);
   }
+
+  @Override
+  public void update(Group group) throws ServiceException {
+    if (group.getStatus() == Status.NON_ACTIVE &&
+            group.getStudents().stream().anyMatch(s -> s.getStatus() == Status.ACTIVE)) {
+      throw new ServiceException("Can not make status non-active: this course contains active groups");
+    }
+    groupRepository.saveAndFlush(group);
+  }
+
+  @Override
+  public void deleteByName(String name) throws ServiceException {
+    Group group = groupRepository.findById(name).orElseThrow(() -> new ServiceException("No group with name " + name));
+    if (!group.getStudents().isEmpty() || !group.getLessons().isEmpty()) {
+      throw new ServiceException("Impossible delete: this group has students or lessons");
+    }
+    groupRepository.deleteById(name);
+  }
 }

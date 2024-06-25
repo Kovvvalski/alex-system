@@ -10,11 +10,33 @@
 <div class="container my-5 p-5 bg-white rounded shadow">
     <div class="row">
         <div class="col-md-6">
-            <h1>Group <span th:text="${group.name}"></span> info</h1>
-            <p class="mb-3">Course:
-                <a th:href="@{/admin/course/{name}(name=${group.course.name})}" th:text="${group.course.name}"/>
-            </p>
-            <p class="mb-3">Status: <span th:text="${group.status}"></span></p>
+            <form th:action="@{/admin/group/update/{name}(name=${group.name})}" th:object="${groupForm}" method="post">
+                <h1 th:text="${group.name}"></h1>
+                <div class="form-group">
+                    <label for="course">Course</label>
+                    <select class="form-control" id="course" th:field="${groupForm.course}">
+                        <option th:each="c : ${courses}"
+                                th:value="${c.name}"
+                                th:text="${c.name}"
+                                th:selected="${c.name == groupForm.course.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" th:field="${groupForm.status}">
+                        <option th:each="status : ${T(by.kovalski.alexsystem.entity.Status).values()}"
+                                th:value="${status}"
+                                th:text="${status}"
+                                th:selected="${status == groupForm.status}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+            <form th:action="@{/admin/group/delete/{name}(name=${group.name})}" method="post">
+                <button type="submit" class="btn btn-danger">Delete Group</button>
+            </form>
         </div>
         <div class="col-md-3">
             <h3 class="mb-3">Students</h3>
@@ -30,6 +52,9 @@
                 <li th:each="lesson : ${group.lessons}" th:text="${lesson.begin}"></li>
             </ul>
         </div>
+    </div>
+    <div th:if="${errorMessage != null}" class="alert alert-danger mt-3" role="alert">
+        <span th:text="${errorMessage}"></span>
     </div>
 </div>
 </body>

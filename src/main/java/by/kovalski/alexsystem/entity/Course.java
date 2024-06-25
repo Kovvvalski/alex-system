@@ -1,6 +1,5 @@
 package by.kovalski.alexsystem.entity;
 
-import by.kovalski.alexsystem.exception.ImpossibleRemoveException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,13 +23,10 @@ public class Course {
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Group> groups;
 
-  @PreRemove
-  private void checkGroupsAssociationBeforeRemove() throws ImpossibleRemoveException {
-    if (!groups.isEmpty()) {
-      throw new ImpossibleRemoveException("Impossible delete: this course has groups");
-    }
-  }
-
   @ManyToMany(mappedBy = "courses")
   private List<Lecturer> lecturers;
+
+  @Column(name = "status")
+  @Enumerated(EnumType.STRING)
+  private Status status;
 }

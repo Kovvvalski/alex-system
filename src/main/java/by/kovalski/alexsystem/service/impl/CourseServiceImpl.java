@@ -1,7 +1,7 @@
 package by.kovalski.alexsystem.service.impl;
 
 import by.kovalski.alexsystem.entity.Course;
-import by.kovalski.alexsystem.exception.ImpossibleRemoveException;
+import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.service.CourseService;
@@ -31,6 +31,11 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
+  public List<Course> findAllActive() {
+    return courseRepository.findAll().stream().filter(c -> c.getStatus() == Status.ACTIVE).toList();
+  }
+
+  @Override
   public void save(Course course) throws ServiceException {
     if (courseRepository.existsById(course.getName())) {
       throw new ServiceException("Course with name " + course.getName() + " already exists");
@@ -39,11 +44,21 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public void deleteByName(String name) throws ServiceException{
-    try {
-      courseRepository.deleteById(name);
-    } catch (ImpossibleRemoveException e) {
-      throw new ServiceException(e.getMessage(), e);
+  public void deleteByName(String name) throws ServiceException {
+    Course course = courseRepository.findById(name).orElseThrow(() -> new ServiceException("No course with name " +
+            name));
+    if (!course.getGroups().isEmpty()) {
+      throw new ServiceException("Impossible delete: this course has groups");
     }
+    courseRepository.deleteById(name);
+  }
+
+  @Override
+  public void update(Course course) throws ServiceException {
+    if (course.getStatus() == Status.NON_ACTIVE &&
+            course.getGroups().stream().anyMatch(g -> g.getStatus() == Status.ACTIVE)) {
+      throw new ServiceException("Can not make status non-active: this course contains active groups");
+    }
+    courseRepository.saveAndFlush(course);
   }
 }

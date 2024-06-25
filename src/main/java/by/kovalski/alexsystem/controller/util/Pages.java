@@ -5,5 +5,7 @@ public class Pages {
   public static final String ADMIN_GROUPS = "admin_groups";
   public static final String ADMIN_GROUP = "admin_group";
   public static final String ADMIN_COURSE = "admin_course";
+  public static final String ADMIN_NEW_COURSE = "admin_new_course";
+  public static final String ADMIN_NEW_GROUP = "admin_new_group";
   public static final String ERROR_PAGE = "error_page";
 }

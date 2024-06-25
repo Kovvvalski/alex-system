@@ -17,4 +17,8 @@ public interface GroupService {
   List<Group> findAllActive();
 
   void save(Group group) throws ServiceException;
+
+  void update(Group group) throws ServiceException;
+
+  void deleteByName(String name) throws ServiceException;
 }
