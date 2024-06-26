@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Lesson {
 
   @Id
@@ -23,6 +24,7 @@ public class Lesson {
 
   @ManyToOne
   @JoinColumn(name = "group_name")
+  @EqualsAndHashCode.Exclude
   private Group group;
 
   @Column(name = "begin")

@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Lecturer extends AbstractPerson {
 
   @ManyToMany
@@ -21,5 +22,6 @@ public class Lecturer extends AbstractPerson {
   private List<Course> courses;
 
   @OneToMany(mappedBy = "lecturer")
+  @EqualsAndHashCode.Exclude
   private List<Lesson> lessons;
 }

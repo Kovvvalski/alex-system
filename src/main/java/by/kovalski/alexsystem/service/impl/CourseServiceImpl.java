@@ -55,6 +55,10 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public void update(Course course) throws ServiceException {
+    if (!courseRepository.existsById(course.getName())) {
+      throw new ServiceException("Course with name " + course.getName() + " not exists");
+    }
+
     if (course.getStatus() == Status.NON_ACTIVE &&
             course.getGroups().stream().anyMatch(g -> g.getStatus() == Status.ACTIVE)) {
       throw new ServiceException("Can not make status non-active: this course contains active groups");

@@ -12,6 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Activity {
 
   @Id
@@ -26,9 +27,11 @@ public class Activity {
 
   @ManyToOne
   @JoinColumn(name = "lesson_id")
+  @EqualsAndHashCode.Exclude
   private Lesson lesson;
 
   @ManyToOne
   @JoinColumn(name = "student_id")
+  @EqualsAndHashCode.Exclude
   private Student student;
 }

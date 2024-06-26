@@ -58,6 +58,10 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public void update(Group group) throws ServiceException {
+    if (!groupRepository.existsById(group.getName())) {
+      throw new ServiceException("Group with name " + group.getName() + " not exists");
+    }
+
     if (group.getStatus() == Status.NON_ACTIVE &&
             group.getStudents().stream().anyMatch(s -> s.getStatus() == Status.ACTIVE)) {
       throw new ServiceException("Can not make status non-active: this course contains active groups");

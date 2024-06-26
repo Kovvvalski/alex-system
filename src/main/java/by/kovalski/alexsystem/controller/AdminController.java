@@ -35,7 +35,7 @@ public class AdminController {
 
   @GetMapping("/admin")
   public String admin_main() {
-    return "admin_main";
+    return ADMIN_MAIN;
   }
 
   @GetMapping("/admin/courses")

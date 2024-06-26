@@ -13,11 +13,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public abstract class AbstractPerson {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private long id;
+  private Long id;
 
   @Column(name = "first_name")
   private String firstName;
@@ -28,10 +29,10 @@ public abstract class AbstractPerson {
   @Column(name = "third_name")
   private String thirdName;
 
-  @Column(name = "telephone_number")
+  @Column(name = "telephone_number", unique = true, nullable = false)
   private String telephoneNumber;
 
-  @Column(name = "email")
+  @Column(name = "email", unique = true, nullable = false)
   private String email;
 
   @Column(name = "status")

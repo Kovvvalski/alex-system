@@ -9,9 +9,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends AbstractPerson {
+@EqualsAndHashCode
+public class User {
 
-  @Column(name = "login")
+  @Id
+  @Column(name = "login", unique = true)
   private String login;
 
   @Column(name = "password")
@@ -20,4 +22,8 @@ public class User extends AbstractPerson {
   @Column(name = "role")
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @OneToOne
+  @JoinColumn(name = "data")
+  private AbstractPerson data;
 }

@@ -12,6 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class HomeTask {
 
   @Id
@@ -22,5 +23,6 @@ public class HomeTask {
   private String task;
 
   @OneToOne(mappedBy = "homeTask")
+  @EqualsAndHashCode.Exclude
   private Lesson lesson;
 }

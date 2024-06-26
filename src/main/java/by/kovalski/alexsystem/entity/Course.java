@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Course {
   private static final int DESCRIPTION_LENGTH = 1000;
 
@@ -24,9 +25,11 @@ public class Course {
   private String description;
 
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
   private List<Group> groups;
 
   @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
   private List<Lecturer> lecturers;
 
   @Column(name = "status")

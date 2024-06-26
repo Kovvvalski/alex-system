@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Group {
 
   @Id
@@ -24,9 +25,11 @@ public class Group {
   private Course course;
 
   @ManyToMany(mappedBy = "groups")
+  @EqualsAndHashCode.Exclude
   private List<Student> students;
 
   @OneToMany(mappedBy = "group")
+  @EqualsAndHashCode.Exclude
   private List<Lesson> lessons;
 
   @Column(name = "status")
