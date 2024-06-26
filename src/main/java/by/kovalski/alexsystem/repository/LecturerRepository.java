@@ -2,6 +2,7 @@ package by.kovalski.alexsystem.repository;
 
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Lecturer;
+import by.kovalski.alexsystem.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface LecturerRepository extends JpaRepository<Lecturer, Long> {
   boolean existsByTelephoneNumberAndIdNot(String telephoneNumber, Long id);
 
   boolean existsByEmailAndIdNot(String email, Long id);
+
+  List<Lecturer> findAllByStatus(Status status);
 }

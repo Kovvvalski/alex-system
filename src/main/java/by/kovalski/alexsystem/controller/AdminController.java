@@ -4,9 +4,11 @@ import by.kovalski.alexsystem.controller.form.admin.CourseForm;
 import by.kovalski.alexsystem.controller.form.admin.GroupForm;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
+import by.kovalski.alexsystem.entity.Lecturer;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.service.CourseService;
 import by.kovalski.alexsystem.service.GroupService;
+import by.kovalski.alexsystem.service.LecturerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,13 @@ public class AdminController {
 
   private final CourseService courseService;
   private final GroupService groupService;
+  private final LecturerService lecturerService;
 
   @Autowired
-  public AdminController(CourseService courseService, GroupService groupService) {
+  public AdminController(CourseService courseService, GroupService groupService, LecturerService lecturerService) {
     this.courseService = courseService;
     this.groupService = groupService;
+    this.lecturerService = lecturerService;
   }
 
   @GetMapping("/admin")
@@ -42,7 +46,6 @@ public class AdminController {
   public String courses(Model model) {
     List<Course> courses = courseService.findAllActive();
     model.addAttribute(COURSES, courses);
-    model.addAttribute(COURSE, new Course());
     return ADMIN_COURSES;
   }
 
@@ -70,6 +73,8 @@ public class AdminController {
     try {
       course = courseService.findByName(name);
     } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      model.addAttribute(ERROR_MSG, e.getMessage());
       return ERROR_PAGE;
     }
     model.addAttribute(COURSE, course);
@@ -114,9 +119,7 @@ public class AdminController {
 
   @GetMapping("/admin/new_group")
   public String newGroup(Model model) {
-    List<Group> groups = groupService.findAll();
     List<Course> courses = courseService.findAllActive();
-    model.addAttribute(GROUPS, groups);
     model.addAttribute(COURSES, courses);
     model.addAttribute(GROUP, new Group());
     return ADMIN_NEW_GROUP;
@@ -140,11 +143,19 @@ public class AdminController {
     try {
       group = groupService.findByName(name);
     } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      model.addAttribute(ERROR_MSG, e.getMessage());
       return ERROR_PAGE;
     }
+
+    List<Course> courses = courseService.findAll();
+    if (!courses.contains(group.getCourse())) {
+      courses.add(group.getCourse());
+    }
+
     model.addAttribute(GROUP, group);
     model.addAttribute(GROUP_FORM, new GroupForm(group));
-    model.addAttribute(COURSES, courseService.findAllActive());
+    model.addAttribute(COURSES, courses);
     return ADMIN_GROUP;
   }
 
@@ -173,5 +184,70 @@ public class AdminController {
       return "redirect:/admin/group/" + name;
     }
     return "redirect:/admin/groups";
+  }
+
+  @GetMapping("/admin/lecturers")
+  public String lecturers(Model model) {
+    model.addAttribute(LECTURERS, lecturerService.findAllActive());
+    return ADMIN_LECTURERS;
+  }
+
+  @GetMapping("/admin/lecturer/{id}")
+  public String lecturer(Model model, @PathVariable Long id) {
+    Lecturer lecturer;
+    try {
+      lecturer = lecturerService.findById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      model.addAttribute(ERROR_MSG, e.getMessage());
+      return ERROR_PAGE;
+    }
+    model.addAttribute(COURSES, courseService.findAllActive());
+    model.addAttribute(LECTURER, lecturer);
+    return ADMIN_LECTURER;
+  }
+
+  @GetMapping("/admin/new_lecturer")
+  public String newLecturer(Model model) {
+    model.addAttribute(LECTURER, new Lecturer());
+    model.addAttribute(COURSES, courseService.findAllActive());
+    return ADMIN_NEW_LECTURER;
+  }
+
+  @PostMapping("/admin/lecturer/update/{id}")
+  public String updateLecturer(@ModelAttribute(LECTURER) Lecturer lecturer, @PathVariable Long id,
+                               RedirectAttributes redirectAttributes) {
+    lecturer.setId(id);
+    try {
+      lecturerService.update(lecturer);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+    }
+    return "redirect:/admin/lecturer/" + id;
+  }
+
+  @PostMapping("/admin/lecturer/delete/{id}")
+  public String deleteLecturer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    try {
+      lecturerService.deleteById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/lecturer/" + id;
+    }
+    return "redirect:/admin/lecturers";
+  }
+
+  @PostMapping("/admin/new_lecturer")
+  public String saveNewLecturer(@ModelAttribute(LECTURER) Lecturer lecturer, RedirectAttributes redirectAttributes) {
+    try {
+      lecturerService.save(lecturer);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/new_lecturer";
+    }
+    return "redirect:/admin";
   }
 }

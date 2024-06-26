@@ -14,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Lecturer extends AbstractPerson {
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "lecturers_courses",
           joinColumns = @JoinColumn(name = "lecturer_id", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(name = "course_name", referencedColumnName = "name")

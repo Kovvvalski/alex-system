@@ -30,8 +30,7 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public List<Group> findAllActive() {
-    List<Group> groups = findAll();
-    return groups.stream().filter(group -> group.getStatus() == Status.ACTIVE).toList();
+    return groupRepository.findAllByStatus(Status.ACTIVE);
   }
 
   @Override

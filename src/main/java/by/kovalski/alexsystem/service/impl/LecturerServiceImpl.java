@@ -84,6 +84,11 @@ public class LecturerServiceImpl implements LecturerService {
   }
 
   @Override
+  public List<Lecturer> findAllActive() {
+    return lecturerRepository.findAllByStatus(Status.ACTIVE);
+  }
+
+  @Override
   public Lecturer findById(Long id) throws ServiceException {
     return lecturerRepository.findById(id).orElseThrow(() -> new ServiceException("No lecturer with id " + id));
   }

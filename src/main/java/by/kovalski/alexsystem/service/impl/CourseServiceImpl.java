@@ -32,7 +32,7 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public List<Course> findAllActive() {
-    return courseRepository.findAll().stream().filter(c -> c.getStatus() == Status.ACTIVE).toList();
+    return courseRepository.findAllByStatus(Status.ACTIVE);
   }
 
   @Override

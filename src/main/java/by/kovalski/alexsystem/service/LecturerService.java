@@ -14,6 +14,8 @@ public interface LecturerService {
 
   List<Lecturer> findAll();
 
+  List<Lecturer> findAllActive();
+
   Lecturer findById(Long id) throws ServiceException;
 
   List<Lecturer> findByCourse(String courseName) throws ServiceException;
