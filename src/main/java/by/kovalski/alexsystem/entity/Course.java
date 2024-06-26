@@ -2,10 +2,13 @@ package by.kovalski.alexsystem.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.List;
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "courses")
 @Getter
 @Setter
@@ -23,7 +26,7 @@ public class Course {
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Group> groups;
 
-  @ManyToMany(mappedBy = "courses")
+  @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Lecturer> lecturers;
 
   @Column(name = "status")

@@ -82,6 +82,7 @@ public class AdminController {
                              @ModelAttribute(COURSE_FORM) CourseForm courseForm,
                              RedirectAttributes redirectAttributes) {
     try {
+      System.out.println("getting");
       Course course = courseService.findByName(name);
       course.setStatus(courseForm.getStatus());
       course.setDescription(courseForm.getDescription());
