@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static by.kovalski.alexsystem.controller.util.Attributes.*;
 import static by.kovalski.alexsystem.controller.util.Pages.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -209,7 +210,9 @@ public class AdminController {
 
   @GetMapping("/admin/new_lecturer")
   public String newLecturer(Model model) {
-    model.addAttribute(LECTURER, new Lecturer());
+    Lecturer lecturer = new Lecturer();
+    lecturer.setCourses(new ArrayList<>());
+    model.addAttribute(LECTURER, lecturer);
     model.addAttribute(COURSES, courseService.findAllActive());
     return ADMIN_NEW_LECTURER;
   }

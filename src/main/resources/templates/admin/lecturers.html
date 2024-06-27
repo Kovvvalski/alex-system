@@ -21,7 +21,7 @@
         </thead>
         <tbody>
         <tr th:each="lecturer : ${lecturers}">
-            <td><a th:href="@{/admin/lecturers/{id}(id=${lecturer.id})}" th:text="${lecturer.firstName + ' ' + lecturer.secondName
+            <td><a th:href="@{/admin/lecturer/{id}(id=${lecturer.id})}" th:text="${lecturer.firstName + ' ' + lecturer.secondName
             + ' ' + lecturer.thirdName}"></a></td>
             <td th:text="${lecturer.telephoneNumber}"></td>
             <td th:text="${lecturer.email}"></td>

@@ -47,7 +47,8 @@
             <h3 class="mb-3">Lecturers</h3>
             <ul class="list-unstyled">
                 <li th:each="lecturer : ${course.lecturers}">
-                    <span th:text="${lecturer.firstName}"></span> <span th:text="${lecturer.secondName}"></span>
+                    <a th:href="@{/admin/lecturer/{id}(id=${lecturer.id})}" th:text="${lecturer.firstName + ' ' + lecturer.secondName
+            + ' ' + lecturer.thirdName}"></a>
                 </li>
             </ul>
         </div>
