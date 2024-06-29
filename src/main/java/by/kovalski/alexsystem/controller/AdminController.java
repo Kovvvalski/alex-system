@@ -2,9 +2,11 @@ package by.kovalski.alexsystem.controller;
 
 import by.kovalski.alexsystem.controller.form.admin.CourseForm;
 import by.kovalski.alexsystem.controller.form.admin.GroupForm;
+import by.kovalski.alexsystem.controller.form.admin.LecturerForm;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
+import by.kovalski.alexsystem.entity.Lesson;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.service.CourseService;
 import by.kovalski.alexsystem.service.GroupService;
@@ -205,6 +207,7 @@ public class AdminController {
     }
     model.addAttribute(COURSES, courseService.findAllActive());
     model.addAttribute(LECTURER, lecturer);
+    model.addAttribute(LECTURER_FORM, new LecturerForm(lecturer));
     return ADMIN_LECTURER;
   }
 
@@ -218,10 +221,17 @@ public class AdminController {
   }
 
   @PostMapping("/admin/lecturer/update/{id}")
-  public String updateLecturer(@ModelAttribute(LECTURER) Lecturer lecturer, @PathVariable Long id,
+  public String updateLecturer(@ModelAttribute(LECTURER_FORM) LecturerForm lecturerForm, @PathVariable Long id,
                                RedirectAttributes redirectAttributes) {
-    lecturer.setId(id);
     try {
+      Lecturer lecturer = lecturerService.findById(id);
+      lecturer.setFirstName(lecturerForm.getFirstName());
+      lecturer.setSecondName(lecturerForm.getSecondName());
+      lecturer.setThirdName(lecturerForm.getThirdName());
+      lecturer.setStatus(lecturerForm.getStatus());
+      lecturer.setEmail(lecturerForm.getEmail());
+      lecturer.setTelephoneNumber(lecturerForm.getTelephoneNumber());
+      lecturer.setCourses(lecturerForm.getCourses());
       lecturerService.update(lecturer);
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
