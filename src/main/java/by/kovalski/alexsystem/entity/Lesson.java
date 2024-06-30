@@ -3,6 +3,8 @@ package by.kovalski.alexsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +22,7 @@ public class Lesson {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "lesson_id")
-  private long id;
+  private Long id;
 
   @ManyToOne
   @JoinColumn(name = "group_name")
