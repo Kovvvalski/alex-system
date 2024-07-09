@@ -1,6 +1,7 @@
-package by.kovalski.alexsystem.controller.form.admin;
+package by.kovalski.alexsystem.dto;
 
 import by.kovalski.alexsystem.entity.Course;
+import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,12 +13,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseForm {
-  private String description;
+public class GroupDTO {
+  private String name;
+  private String courseName;
   private Status status;
 
-  public CourseForm(Course course) {
-    this.description = course.getDescription();
-    this.status = course.getStatus();
+  public GroupDTO(Group group) {
+    this.courseName = group.getCourse().getName();
+    this.status = group.getStatus();
   }
 }

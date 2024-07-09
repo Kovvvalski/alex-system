@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New lesson</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/admin_header :: admin_header}"></div>
+<div class="container my-5">
+    <h1 class="mb-4">Add new lesson</h1>
+    <form th:action="@{/admin/new_lesson}" method="post" th:object="${lessonDTO}">
+        <div class="form-group">
+            <label for="group">Group</label>
+            <select class="form-control" id="group" th:field="*{groupName}" required>
+                <option th:each="group : ${groups}" th:value="${group.name}" th:text="${group.name}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lecturer">Lecturer</label>
+            <select class="form-control" id="lecturer" th:field="*{lecturerId}" required>
+                <option th:each="lecturer : ${lecturers}" th:value="${lecturer.id}"
+                        th:text="${lecturer.toString()}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="startTime">Start Time</label>
+            <input type="datetime-local" class="form-control" id="startTime" th:field="*{begin}">
+        </div>
+        <div class="form-group">
+            <label for="endTime">End Time</label>
+            <input type="datetime-local" class="form-control" id="endTime" th:field="*{end}">
+        </div>
+        <div class="form-group">
+            <label for="homework">Home task</label>
+            <textarea class="form-control" id="homework" rows="3" th:field="*{homeTask}" maxlength="500"></textarea>
+            <small class="form-text text-muted">Maximum 500 characters</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div th:if="${errorMessage != null}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+</div>
+</body>
+</html>

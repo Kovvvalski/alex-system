@@ -9,7 +9,7 @@
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
 <div class="container my-5">
     <h1 class="mb-4">Add new group</h1>
-    <form th:action="@{/admin/new_group}" method="post" th:object="${group}">
+    <form th:action="@{/admin/new_group}" method="post" th:object="${groupDTO}">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}" required>
@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <label for="course">Course</label>
-            <select class="form-control" id="course" th:field="*{course.name}" required>
+            <select class="form-control" id="course" th:field="*{courseName}" required>
                 <option th:each="course : ${courses}" th:value="${course.name}" th:text="${course.name}"></option>
             </select>
         </div>

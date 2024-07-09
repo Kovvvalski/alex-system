@@ -1,8 +1,9 @@
 package by.kovalski.alexsystem.controller;
 
-import by.kovalski.alexsystem.controller.form.admin.CourseForm;
-import by.kovalski.alexsystem.controller.form.admin.GroupForm;
-import by.kovalski.alexsystem.controller.form.admin.LecturerForm;
+import by.kovalski.alexsystem.dto.CourseDTO;
+import by.kovalski.alexsystem.dto.GroupDTO;
+import by.kovalski.alexsystem.dto.LecturerDTO;
+import by.kovalski.alexsystem.dto.LessonDTO;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
@@ -11,6 +12,7 @@ import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.service.CourseService;
 import by.kovalski.alexsystem.service.GroupService;
 import by.kovalski.alexsystem.service.LecturerService;
+import by.kovalski.alexsystem.service.LessonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static by.kovalski.alexsystem.controller.util.Attributes.*;
 import static by.kovalski.alexsystem.controller.util.Pages.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,16 +33,19 @@ public class AdminController {
   private final CourseService courseService;
   private final GroupService groupService;
   private final LecturerService lecturerService;
+  private final LessonService lessonService;
 
   @Autowired
-  public AdminController(CourseService courseService, GroupService groupService, LecturerService lecturerService) {
+  public AdminController(CourseService courseService, GroupService groupService,
+                         LecturerService lecturerService, LessonService lessonService) {
     this.courseService = courseService;
     this.groupService = groupService;
     this.lecturerService = lecturerService;
+    this.lessonService = lessonService;
   }
 
   @GetMapping("/admin")
-  public String admin_main() {
+  public String adminMain() {
     return ADMIN_MAIN;
   }
 
@@ -54,14 +58,15 @@ public class AdminController {
 
   @GetMapping("/admin/new_course")
   public String newCourse(Model model) {
-    model.addAttribute(COURSE, new Course());
+    model.addAttribute(COURSE_DTO, new CourseDTO());
     return ADMIN_NEW_COURSE;
   }
 
   @PostMapping("/admin/new_course")
-  public String saveNewCourse(@ModelAttribute(COURSE) Course course, RedirectAttributes redirectAttributes) {
+  public String saveNewCourse(@ModelAttribute(COURSE_DTO) CourseDTO courseDTO, RedirectAttributes redirectAttributes) {
+
     try {
-      courseService.save(course);
+      courseService.save(courseService.getFromDTO(courseDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
@@ -81,20 +86,16 @@ public class AdminController {
       return ERROR_PAGE;
     }
     model.addAttribute(COURSE, course);
-    model.addAttribute(COURSE_FORM, new CourseForm(course));
+    model.addAttribute(COURSE_DTO, new CourseDTO(course));
     return ADMIN_COURSE;
   }
 
   @PostMapping("/admin/course/update/{name}")
   public String updateCourse(@PathVariable String name,
-                             @ModelAttribute(COURSE_FORM) CourseForm courseForm,
+                             @ModelAttribute(COURSE_DTO) CourseDTO courseDTO,
                              RedirectAttributes redirectAttributes) {
     try {
-      System.out.println("getting");
-      Course course = courseService.findByName(name);
-      course.setStatus(courseForm.getStatus());
-      course.setDescription(courseForm.getDescription());
-      courseService.update(course);
+      courseService.update(courseService.getFromDTO(courseDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
@@ -124,14 +125,14 @@ public class AdminController {
   public String newGroup(Model model) {
     List<Course> courses = courseService.findAllActive();
     model.addAttribute(COURSES, courses);
-    model.addAttribute(GROUP, new Group());
+    model.addAttribute(GROUP_DTO, new GroupDTO());
     return ADMIN_NEW_GROUP;
   }
 
   @PostMapping("/admin/new_group")
-  public String saveNewGroup(@ModelAttribute(GROUP) Group group, RedirectAttributes redirectAttributes) {
+  public String saveNewGroup(@ModelAttribute(GROUP_DTO) GroupDTO groupDTO, RedirectAttributes redirectAttributes) {
     try {
-      groupService.save(group);
+      groupService.save(groupService.getFromDTO(groupDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
@@ -157,19 +158,16 @@ public class AdminController {
     }
 
     model.addAttribute(GROUP, group);
-    model.addAttribute(GROUP_FORM, new GroupForm(group));
+    model.addAttribute(GROUP_DTO, new GroupDTO(group));
     model.addAttribute(COURSES, courses);
     return ADMIN_GROUP;
   }
 
   @PostMapping("/admin/group/update/{name}")
-  public String updateGroup(@PathVariable String name, @ModelAttribute(GROUP_FORM) GroupForm groupForm,
+  public String updateGroup(@PathVariable String name, @ModelAttribute(GROUP_DTO) GroupDTO groupDTO,
                             RedirectAttributes redirectAttributes) {
     try {
-      Group group = groupService.findByName(name);
-      group.setCourse(groupForm.getCourse());
-      group.setStatus(groupForm.getStatus());
-      groupService.update(group);
+      groupService.update(groupService.getFromDTO(groupDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
@@ -207,35 +205,37 @@ public class AdminController {
     }
     model.addAttribute(COURSES, courseService.findAllActive());
     model.addAttribute(LECTURER, lecturer);
-    model.addAttribute(LECTURER_FORM, new LecturerForm(lecturer));
+    model.addAttribute(LECTURER_DTO, new LecturerDTO(lecturer));
     return ADMIN_LECTURER;
   }
 
   @GetMapping("/admin/new_lecturer")
   public String newLecturer(Model model) {
-    Lecturer lecturer = new Lecturer();
-    lecturer.setCourses(new ArrayList<>());
-    model.addAttribute(LECTURER, lecturer);
+    model.addAttribute(LECTURER_DTO, new LecturerDTO());
     model.addAttribute(COURSES, courseService.findAllActive());
     return ADMIN_NEW_LECTURER;
   }
 
-  @PostMapping("/admin/lecturer/update/{id}")
-  public String updateLecturer(@ModelAttribute(LECTURER_FORM) LecturerForm lecturerForm, @PathVariable Long id,
-                               RedirectAttributes redirectAttributes) {
+  @PostMapping("/admin/new_lecturer")
+  public String saveNewLecturer(@ModelAttribute(LECTURER_DTO) LecturerDTO lecturerDTO, RedirectAttributes redirectAttributes) {
     try {
-      Lecturer lecturer = lecturerService.findById(id);
-      lecturer.setFirstName(lecturerForm.getFirstName());
-      lecturer.setSecondName(lecturerForm.getSecondName());
-      lecturer.setThirdName(lecturerForm.getThirdName());
-      lecturer.setStatus(lecturerForm.getStatus());
-      lecturer.setEmail(lecturerForm.getEmail());
-      lecturer.setTelephoneNumber(lecturerForm.getTelephoneNumber());
-      lecturer.setCourses(lecturerForm.getCourses());
-      lecturerService.update(lecturer);
+      lecturerService.save(lecturerService.getFromDTO(lecturerDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
-      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/new_lecturer";
+    }
+    return "redirect:/admin";
+  }
+
+  @PostMapping("/admin/lecturer/update/{id}")
+  public String updateLecturer(@ModelAttribute(LECTURER_DTO) LecturerDTO lecturerDTO, @PathVariable Long id,
+                               RedirectAttributes redirectAttributes) {
+    try {
+      lecturerService.update(lecturerService.getFromDTO(lecturerDTO));
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
     }
     return "redirect:/admin/lecturer/" + id;
   }
@@ -246,20 +246,73 @@ public class AdminController {
       lecturerService.deleteById(id);
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
-      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/lecturer/" + id;
     }
     return "redirect:/admin/lecturers";
   }
 
-  @PostMapping("/admin/new_lecturer")
-  public String saveNewLecturer(@ModelAttribute(LECTURER) Lecturer lecturer, RedirectAttributes redirectAttributes) {
+  @GetMapping("/admin/lessons")
+  public String lessons(Model model) {
+    model.addAttribute(LESSONS, lessonService.findAll());
+    return ADMIN_LESSONS;
+  }
+
+  @GetMapping("/admin/lesson/{id}")
+  public String lesson(@PathVariable long id, Model model) {
     try {
-      lecturerService.save(lecturer);
+      Lesson lesson = lessonService.findById(id);
+      model.addAttribute(LESSON_DTO, new LessonDTO(lesson));
+      model.addAttribute(GROUPS, groupService.findAllActive());
+      model.addAttribute(LECTURERS, lecturerService.findAllActive());
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      model.addAttribute(ERROR_MSG, e.getMessage());
+      return ERROR_PAGE;
+    }
+    return ADMIN_LESSON;
+  }
+
+  @PostMapping("/admin/lesson/update/{id}")
+  public String updateLesson(@PathVariable long id, RedirectAttributes redirectAttributes, @ModelAttribute LessonDTO lessonDTO) {
+    lessonDTO.setId(id);
+    try {
+      lessonService.update(lessonService.getFromDTO(lessonDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage());
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
-      return "redirect:/admin/new_lecturer";
+    }
+    return "redirect:/admin/lesson/" + id;
+  }
+
+  @GetMapping("/admin/new_lesson")
+  public String newLesson(Model model) {
+    model.addAttribute(LESSON_DTO, new LessonDTO());
+    model.addAttribute(GROUPS, groupService.findAllActive());
+    model.addAttribute(LECTURERS, lecturerService.findAllActive());
+    return ADMIN_NEW_LESSON;
+  }
+
+  @PostMapping("/admin/new_lesson")
+  public String saveNewLesson(@ModelAttribute(LESSON) Lesson lesson, RedirectAttributes redirectAttributes) {
+    try {
+      lessonService.save(lesson);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/new_lesson";
+    }
+    return "redirect:/admin";
+  }
+
+  @PostMapping("/admin/lesson/delete/{id}")
+  public String deleteLesson(@PathVariable long id, RedirectAttributes redirectAttributes) {
+    try {
+      lessonService.deleteById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage());
+      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/lesson/" + id;
     }
     return "redirect:/admin";
   }

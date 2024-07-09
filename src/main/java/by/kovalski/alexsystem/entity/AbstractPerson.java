@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.util.StringJoiner;
+
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -38,4 +40,13 @@ public abstract class AbstractPerson {
   @Column(name = "status")
   @Enumerated(EnumType.STRING)
   private Status status;
+
+  @Override
+  public String toString() {
+    return new StringJoiner(" ")
+            .add(firstName)
+            .add(secondName)
+            .add(thirdName)
+            .toString();
+  }
 }

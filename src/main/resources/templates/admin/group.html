@@ -11,24 +11,24 @@
     <h1 th:text="${group.name}"></h1>
     <div class="row">
         <div class="col-md-6">
-            <form th:action="@{/admin/group/update/{name}(name=${group.name})}" th:object="${groupForm}" method="post">
+            <form th:action="@{/admin/group/update/{name}(name=${group.name})}" th:object="${groupDTO}" method="post">
                 <div class="form-group">
                     <label for="course">Course</label>
-                    <select class="form-control" id="course" th:field="${groupForm.course}">
-                        <option th:each="c : ${courses}"
-                                th:value="${c.name}"
-                                th:text="${c.name}"
-                                th:selected="${c.name == groupForm.course.name}">
+                    <select class="form-control" id="course" th:field="*{courseName}">
+                        <option th:each="course : ${courses}"
+                                th:value="${course.name}"
+                                th:text="${course.name}"
+                                th:selected="${course.name == groupDTO.courseName}">
                         </option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="status">Status</label>
-                    <select class="form-control" id="status" th:field="${groupForm.status}">
+                    <select class="form-control" id="status" th:field="*{status}">
                         <option th:each="status : ${T(by.kovalski.alexsystem.entity.Status).values()}"
                                 th:value="${status}"
                                 th:text="${status}"
-                                th:selected="${status == groupForm.status}">
+                                th:selected="${status == groupDTO.status}">
                         </option>
                     </select>
                 </div>
@@ -42,14 +42,14 @@
             <h3 class="mb-3">Students</h3>
             <ul class="list-unstyled">
                 <li th:each="student : ${group.students}">
-                    <span th:text="${student.firstName}"></span> <span th:text="${student.secondName}"></span>
+                    <span th:text="${student.toString()}"></span>
                 </li>
             </ul>
         </div>
         <div class="col-md-3">
             <h3 class="mb-3">Lessons</h3>
             <ul class="list-unstyled">
-                <li th:each="lesson : ${group.lessons}" th:text="${lesson.begin}"></li>
+                <li th:each="lesson : ${group.lessons}" th:text="${lesson.toString()}"></li>
             </ul>
         </div>
     </div>

@@ -9,7 +9,7 @@
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
 <div class="container my-5">
     <h1 class="mb-4">Add new course</h1>
-    <form th:action="@{/admin/new_course}" method="post" th:object="${course}">
+    <form th:action="@{/admin/new_course}" method="post" th:object="${courseDTO}">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}" required>

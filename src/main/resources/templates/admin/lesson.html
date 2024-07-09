@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${lessonDTO.begin.toString()}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/admin_header :: admin_header}"></div>
+<div class="container my-5 p-5 bg-white rounded shadow">
+    <h1 th:text="${lessonDTO.begin.toString()}"></h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form th:action="@{/admin/lesson/update/{id}(id=${lessonDTO.id})}" th:object="${lessonDTO}" method="post">
+                <div class="form-group">
+                    <label for="group">Group</label>
+                    <select class="form-control" id="group" th:field="*{groupName}">
+                        <option th:each="group : ${groups}"
+                                th:value="${group.name}"
+                                th:text="${group.name}"
+                                th:selected="${group.name == lessonDTO.groupName}">
+                        </option>
+                    </select>
+
+                    <label for="lecturer">Lecturer</label>
+                    <select class="form-control" id="lecturer" th:field="*{lecturerId}">
+                        <option th:each="lecturer : ${lecturers}"
+                                th:value="${lecturer.id}"
+                                th:text="${lecturer.toString()}"
+                                th:selected="${lecturer.id == lessonDTO.lecturerId}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="begin-time">Start Time</label>
+                    <input type="datetime-local" class="form-control" id="begin-time" th:field="*{begin}">
+                </div>
+
+                <div class="form-group">
+                    <label for="end-time">End Time</label>
+                    <input type="datetime-local" class="form-control" id="end-time" th:field="*{end}">
+                </div>
+
+                <div class="form-group">
+                    <label for="home_task">Home Task</label>
+                    <textarea class="form-control" id="home_task" th:field="*{homeTask}" rows="3"
+                              maxlength="500"></textarea>
+                    <small class="form-text text-muted">Maximum 500 characters</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    window.onload = function () {
+                        document.getElementById("begin-time").value = /*[[${lessonDTO.begin.toString()}]]*/ '2018-06-12T19:30';
+                        document.getElementById("end-time").value = /*[[${lessonDTO.end.toString()}]]*/ '2018-06-12T19:30';
+                    };
+                    /*]]>*/
+                </script>
+            </form>
+
+            <form th:action="@{/admin/lesson/delete/{id}(id=${lessonDTO.id})}" method="post">
+                <button type="submit" class="btn btn-danger">Delete Lesson</button>
+            </form>
+        </div>
+    </div>
+    <div th:if="${errorMessage != null}" class="alert alert-danger mt-3" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+</div>
+</body>
+</html>

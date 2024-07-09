@@ -1,11 +1,13 @@
 package by.kovalski.alexsystem.service.impl;
 
+import by.kovalski.alexsystem.dto.GroupDTO;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.repository.GroupRepository;
+import by.kovalski.alexsystem.repository.StudentRepository;
 import by.kovalski.alexsystem.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,11 +62,6 @@ public class GroupServiceImpl implements GroupService {
     if (!groupRepository.existsById(group.getName())) {
       throw new ServiceException("Group with name " + group.getName() + " not exists");
     }
-
-    if (group.getStatus() == Status.NON_ACTIVE &&
-            group.getStudents().stream().anyMatch(s -> s.getStatus() == Status.ACTIVE)) {
-      throw new ServiceException("Can not make status non-active: this course contains active groups");
-    }
     groupRepository.saveAndFlush(group);
   }
 
@@ -75,5 +72,13 @@ public class GroupServiceImpl implements GroupService {
       throw new ServiceException("Impossible delete: this group has students or lessons");
     }
     groupRepository.deleteById(name);
+  }
+
+  @Override
+  public Group getFromDTO(GroupDTO groupDTO) throws ServiceException {
+    return new Group(groupDTO.getName(),
+            courseRepository.findById(groupDTO.getCourseName()).
+                    orElseThrow(() -> new ServiceException("No course with name " + groupDTO.getCourseName())),
+            null, null, groupDTO.getStatus());
   }
 }

@@ -3,8 +3,6 @@ package by.kovalski.alexsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
 
 import java.time.LocalDateTime;
 
@@ -39,7 +37,11 @@ public class Lesson {
   @JoinColumn(name = "lecturer_id")
   private Lecturer lecturer;
 
-  @OneToOne
-  @JoinColumn(name = "home_task_id")
-  private HomeTask homeTask;
+  @Column(name = "home_task")
+  private String homeTask;
+
+  @Override
+  public String toString() {
+    return begin.toString();
+  }
 }

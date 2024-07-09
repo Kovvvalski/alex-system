@@ -11,6 +11,9 @@ public class Pages {
   public static final String ADMIN_NEW_LECTURER = "admin/new_lecturer";
   public static final String ADMIN_LECTURER = "admin/lecturer";
   public static final String ADMIN_LECTURERS = "admin/lecturers";
+  public static final String ADMIN_LESSONS = "admin/lessons";
+  public static final String ADMIN_LESSON = "admin/lesson";
+  public static final String ADMIN_NEW_LESSON = "admin/new_lesson";
 
   public static final String ERROR_PAGE = "error_page";
 }

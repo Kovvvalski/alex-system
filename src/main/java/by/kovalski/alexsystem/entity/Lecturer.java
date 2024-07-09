@@ -24,4 +24,11 @@ public class Lecturer extends AbstractPerson {
   @OneToMany(mappedBy = "lecturer")
   @EqualsAndHashCode.Exclude
   private List<Lesson> lessons;
+
+  public Lecturer(Long id, String firstName, String secondName, String thirdName, String telephoneNumber, String email,
+                  Status status, List<Course> courses, List<Lesson> lessons) {
+    super(id, firstName, secondName, thirdName, telephoneNumber, email, status);
+    this.courses = courses;
+    this.lessons = lessons;
+  }
 }

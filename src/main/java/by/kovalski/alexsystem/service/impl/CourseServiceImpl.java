@@ -1,9 +1,12 @@
 package by.kovalski.alexsystem.service.impl;
 
+import by.kovalski.alexsystem.dto.CourseDTO;
 import by.kovalski.alexsystem.entity.Course;
+import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
+import by.kovalski.alexsystem.repository.GroupRepository;
 import by.kovalski.alexsystem.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +17,12 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
   private final CourseRepository courseRepository;
+  private final GroupRepository groupRepository;
 
   @Autowired
-  public CourseServiceImpl(CourseRepository courseRepository) {
+  public CourseServiceImpl(CourseRepository courseRepository, GroupRepository groupRepository) {
     this.courseRepository = courseRepository;
+    this.groupRepository = groupRepository;
   }
 
   @Override
@@ -64,5 +69,12 @@ public class CourseServiceImpl implements CourseService {
       throw new ServiceException("Can not make status non-active: this course contains active groups");
     }
     courseRepository.saveAndFlush(course);
+  }
+
+  @Override
+  public Course getFromDTO(CourseDTO courseDTO) throws ServiceException {
+    Course course = new Course(courseDTO.getName(), courseDTO.getDescription(), null, null, courseDTO.getStatus());
+    course.setGroups(groupRepository.findAllByCourse(course));
+    return course;
   }
 }

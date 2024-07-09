@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lessons</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/admin_header :: admin_header}"></div>
+<div class="container my-5">
+    <h1 class="mb-4">Lessons</h1>
+
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Group</th>
+            <th>Lecturer</th>
+            <th>Begin-End</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lesson : ${lessons}">
+
+            <td>
+                <a th:href="@{/admin/group/{name}(name=${lesson.group.name})}" th:text="${lesson.group.name}"></a>
+            </td>
+            <td>
+                <a th:href="@{/admin/lecturer/{id}(id=${lesson.lecturer.id})}"
+                   th:text="${lesson.lecturer.toString()}"></a>
+            </td>
+            <td>
+                <a th:href="@{/admin/lesson/{id}(id=${lesson.id})}"
+                   th:text="${lesson.begin.toString() + lesson.end.toString()}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${errorMessage != null}" class="alert alert-danger mt-3" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+</div>
+</body>
+</html>

@@ -1,11 +1,14 @@
 package by.kovalski.alexsystem.service.impl;
 
+import by.kovalski.alexsystem.dto.LecturerDTO;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Lecturer;
+import by.kovalski.alexsystem.entity.Lesson;
 import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.repository.LecturerRepository;
+import by.kovalski.alexsystem.repository.LessonRepository;
 import by.kovalski.alexsystem.service.LecturerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import static by.kovalski.alexsystem.service.ServiceUtil.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,16 +24,18 @@ public class LecturerServiceImpl implements LecturerService {
 
   private final LecturerRepository lecturerRepository;
   private final CourseRepository courseRepository;
+  private final LessonRepository lessonRepository;
 
   @Autowired
-  public LecturerServiceImpl(LecturerRepository lecturerRepository, CourseRepository courseRepository) {
+  public LecturerServiceImpl(LecturerRepository lecturerRepository, CourseRepository courseRepository, LessonRepository lessonRepository) {
     this.lecturerRepository = lecturerRepository;
     this.courseRepository = courseRepository;
+    this.lessonRepository = lessonRepository;
   }
 
   @Override
   public void save(Lecturer lecturer) throws ServiceException {
-    checkValidity(lecturer);
+    validate(lecturer);
 
     if (lecturerRepository.existsByEmail(lecturer.getEmail())) {
       throw new ServiceException("Lecturer with email " + lecturer.getEmail() + " already exists");
@@ -45,7 +51,7 @@ public class LecturerServiceImpl implements LecturerService {
 
   @Override
   public void update(Lecturer lecturer) throws ServiceException {
-    checkValidity(lecturer);
+    validate(lecturer);
 
     if (lecturer.getId() == null) {
       throw new ServiceException("Null id value");
@@ -100,7 +106,24 @@ public class LecturerServiceImpl implements LecturerService {
     return lecturerRepository.findLecturersByCourses(List.of(course));
   }
 
-  static void checkValidity(Lecturer lecturer) throws ServiceException {
+  @Override
+  public Lecturer getFromDTO(LecturerDTO lecturerDTO) throws ServiceException {
+    Lecturer lecturer = new Lecturer(lecturerDTO.getId(), lecturerDTO.getFirstName(), lecturerDTO.getSecondName(),
+            lecturerDTO.getThirdName(), lecturerDTO.getTelephoneNumber(), lecturerDTO.getEmail(),
+            lecturerDTO.getStatus(), null, null);
+
+    List<Course> courses = new ArrayList<>(lecturerDTO.getCourses().size());
+    for (String course : lecturerDTO.getCourses()) {
+      courses.add(courseRepository.findById(course).orElseThrow(() -> new ServiceException("No course with name " + course)));
+    }
+    List<Lesson> lessons = lessonRepository.findAllByLecturer(lecturer);
+
+    lecturer.setCourses(courses);
+    lecturer.setLessons(lessons);
+    return lecturer;
+  }
+
+  static void validate(Lecturer lecturer) throws ServiceException {
     if (!lecturer.getEmail().matches(EMAIL_REGEX)) {
       throw new ServiceException("Not valid email");
     }

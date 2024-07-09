@@ -1,5 +1,6 @@
 package by.kovalski.alexsystem.service;
 
+import by.kovalski.alexsystem.dto.GroupDTO;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.exception.ServiceException;
@@ -21,4 +22,6 @@ public interface GroupService {
   void update(Group group) throws ServiceException;
 
   void deleteByName(String name) throws ServiceException;
+
+  Group getFromDTO(GroupDTO groupDTO) throws ServiceException;
 }

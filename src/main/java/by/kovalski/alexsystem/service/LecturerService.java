@@ -1,5 +1,6 @@
 package by.kovalski.alexsystem.service;
 
+import by.kovalski.alexsystem.dto.LecturerDTO;
 import by.kovalski.alexsystem.entity.Lecturer;
 import by.kovalski.alexsystem.exception.ServiceException;
 
@@ -19,4 +20,6 @@ public interface LecturerService {
   Lecturer findById(Long id) throws ServiceException;
 
   List<Lecturer> findByCourse(String courseName) throws ServiceException;
+
+  Lecturer getFromDTO(LecturerDTO lecturerDTO) throws ServiceException;
 }

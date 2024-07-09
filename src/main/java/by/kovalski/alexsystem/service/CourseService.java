@@ -1,5 +1,6 @@
 package by.kovalski.alexsystem.service;
 
+import by.kovalski.alexsystem.dto.CourseDTO;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.exception.ServiceException;
 
@@ -17,4 +18,6 @@ public interface CourseService {
   void deleteByName(String name) throws ServiceException;
 
   void update(Course course) throws ServiceException;
+
+  Course getFromDTO(CourseDTO courseDTO) throws ServiceException;
 }

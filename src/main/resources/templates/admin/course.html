@@ -11,21 +11,21 @@
     <h1 th:text="${course.name}"></h1>
     <div class="row">
         <div class="col-md-6">
-            <form th:action="@{/admin/course/update/{name}(name=${course.name})}" th:object="${courseForm}"
+            <form th:action="@{/admin/course/update/{name}(name=${course.name})}" th:object="${courseDTO}"
                   method="post">
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description" th:field="${courseForm.description}" rows="3"
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="3"
                               maxlength="1000"></textarea>
                     <small class="form-text text-muted">Maximum 1000 characters</small>
                 </div>
                 <div class="form-group">
                     <label for="status">Status</label>
-                    <select class="form-control" id="status" th:field="${courseForm.status}">
+                    <select class="form-control" id="status" th:field="*{status}">
                         <option th:each="status : ${T(by.kovalski.alexsystem.entity.Status).values()}"
                                 th:value="${status}"
                                 th:text="${status}"
-                                th:selected="${status == courseForm.status}">
+                                th:selected="${status == courseDTO.status}">
                         </option>
                     </select>
                 </div>
@@ -47,8 +47,7 @@
             <h3 class="mb-3">Lecturers</h3>
             <ul class="list-unstyled">
                 <li th:each="lecturer : ${course.lecturers}">
-                    <a th:href="@{/admin/lecturer/{id}(id=${lecturer.id})}" th:text="${lecturer.firstName + ' ' + lecturer.secondName
-            + ' ' + lecturer.thirdName}"></a>
+                    <a th:href="@{/admin/lecturer/{id}(id=${lecturer.id})}" th:text="${lecturer.toString()}"></a>
                 </li>
             </ul>
         </div>

@@ -12,7 +12,7 @@
                 + ${lecturer.thirdName}"></h1>
     <div class="row">
         <div class="col-md-6">
-            <form th:action="@{/admin/lecturer/update/{id}(id=${lecturer.id})}" th:object="${lecturerForm}" method="post">
+            <form th:action="@{/admin/lecturer/update/{id}(id=${lecturer.id})}" th:object="${lecturerDTO}" method="post">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
                     <input type="text" class="form-control" id="firstName" th:field="*{firstName}"/>
@@ -40,7 +40,7 @@
                         <option th:each="status : ${T(by.kovalski.alexsystem.entity.Status).values()}"
                                 th:value="${status}"
                                 th:text="${status}"
-                                th:selected="${status == lecturerForm.status}">
+                                th:selected="${status == lecturerDTO.status}">
                         </option>
                     </select>
                 </div>
