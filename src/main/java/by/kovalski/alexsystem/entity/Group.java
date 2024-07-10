@@ -29,6 +29,7 @@ public class Group {
   private List<Student> students;
 
   @OneToMany(mappedBy = "group")
+  @OrderBy("begin ASC")
   @EqualsAndHashCode.Exclude
   private List<Lesson> lessons;
 

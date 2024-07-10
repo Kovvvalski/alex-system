@@ -1,71 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Main</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Admin Main</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
-<div class="container my-5">
-  <h1 class="mb-4">Admin main page</h1>
-
-  <div class="row">
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/lecturers}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> Lecturers
-      </a>
+<div class="container my-5"><h1 class="mb-4">Manager main page</h1>
+    <div class="row">
+        <div class="col-md-4 mb-4"><h2>Groups managing</h2> <a th:href="@{/admin/groups}"
+                                                               class="btn btn-primary btn-block"> <i
+                class="fas fa-users"></i> Groups </a> <a th:href="@{/admin/new_group}"
+                                                         class="btn btn-primary btn-block"> <i class="fas fa-users"></i>
+            New group </a></div>
+        <div class="col-md-4 mb-4"><h2>Lecturers managing</h2> <a th:href="@{/admin/lecturers}"
+                                                                  class="btn btn-primary btn-block"> <i
+                class="fas fa-users"></i>
+            Lecturers </a> <a th:href="@{/admin/new_lecturer}" class="btn btn-primary btn-block"> <i
+                class="fas fa-users"></i> New lecturer </a></div>
+        <div class="col-md-4 mb-4"><h2>Courses managing</h2> <a th:href="@{/admin/courses}"
+                                                                class="btn btn-primary btn-block"> <i
+                class="fas fa-book"></i> Courses </a> <a th:href="@{/admin/new_course}"
+                                                         class="btn btn-primary btn-block"> <i class="fas fa-users"></i>
+            New course </a></div>
     </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/new_lecturer}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> New lecturer
-      </a>
+    <div class="row">
+        <div class="col-md-4 mb-4"><h2>Students managing</h2> <a th:href="@{/admin/students}"
+                                                                 class="btn btn-primary btn-block">
+            <i class="fas fa-users"></i> Students </a></div>
+        <div class="col-md-4 mb-4"><h2>Parents managing</h2> <a th:href="@{/admin/parents}"
+                                                                class="btn btn-primary btn-block"> <i
+                class="fas fa-users"></i> Parents </a></div>
+        <div class="col-md-4 mb-4"><h2>Schedule managing</h2> <a th:href="@{/admin/lessons}" class="btn btn-primary btn-block"> <i
+                class="fas fa-users"></i> Lessons </a> <a th:href="@{/admin/new_lesson}"
+                                                          class="btn btn-primary btn-block"> <i
+                class="fas fa-users"></i> New Lesson </a></div>
     </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/groups}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> Groups
-      </a>
-    </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/courses}" class="btn btn-primary btn-block">
-        <i class="fas fa-book"></i> Courses
-      </a>
-    </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/students}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> Students
-      </a>
-    </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/new_group}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> New group
-      </a>
-    </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/new_course}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> New course
-      </a>
-    </div>
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/parents}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> Parents
-      </a>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/lessons}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> Lessons
-      </a>
-    </div>
-
-    <div class="col-md-4 mb-4">
-      <a th:href="@{/admin/new_lesson}" class="btn btn-primary btn-block">
-        <i class="fas fa-users"></i> New Lesson
-      </a>
-    </div>
-  </div>
-
-
 </div>
 </body>
 </html>

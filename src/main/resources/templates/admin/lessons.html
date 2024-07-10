@@ -15,7 +15,7 @@
         <tr>
             <th>Group</th>
             <th>Lecturer</th>
-            <th>Begin-End</th>
+            <th>Begin</th>
         </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
             </td>
             <td>
                 <a th:href="@{/admin/lesson/{id}(id=${lesson.id})}"
-                   th:text="${lesson.begin.toString() + lesson.end.toString()}"></a>
+                   th:text="${lesson.toString()}"></a>
             </td>
         </tr>
         </tbody>

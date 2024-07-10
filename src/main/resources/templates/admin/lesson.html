@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${lessonDTO.begin.toString()}"/>
+    <title th:text="${lessonDTO.toString()}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
 <div class="container my-5 p-5 bg-white rounded shadow">
-    <h1 th:text="${lessonDTO.begin.toString()}"></h1>
+    <h1 th:text="${lessonDTO.toString()}"></h1>
     <div class="row">
         <div class="col-md-6">
             <form th:action="@{/admin/lesson/update/{id}(id=${lessonDTO.id})}" th:object="${lessonDTO}" method="post">

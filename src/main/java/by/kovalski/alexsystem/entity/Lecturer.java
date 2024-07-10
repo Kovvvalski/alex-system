@@ -22,6 +22,7 @@ public class Lecturer extends AbstractPerson {
   private List<Course> courses;
 
   @OneToMany(mappedBy = "lecturer")
+  @OrderBy("begin ASC")
   @EqualsAndHashCode.Exclude
   private List<Lesson> lessons;
 

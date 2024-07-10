@@ -28,4 +28,9 @@ public class LessonDTO {
     lecturerId = lesson.getLecturer().getId();
     homeTask = lesson.getHomeTask();
   }
+
+  @Override
+  public String toString() {
+    return begin.toString();
+  }
 }

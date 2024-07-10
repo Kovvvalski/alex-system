@@ -91,6 +91,7 @@ public class LessonServiceImpl implements LessonService {
     if (lesson.getBegin().isAfter(lesson.getEnd())) {
       throw new ServiceException("Begin is after end");
     }
+    //TODO refactor time logic
     if (lesson.getLecturer().getLessons().stream().anyMatch(l -> !lesson.getId().equals(l.getId()) && isTimeIntersection(lesson, l))) {
       throw new ServiceException("This lesson has time intersection with selected lecturer");
     }
