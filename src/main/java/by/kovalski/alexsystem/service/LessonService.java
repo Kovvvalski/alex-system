@@ -1,6 +1,7 @@
 package by.kovalski.alexsystem.service;
 
 import by.kovalski.alexsystem.dto.LessonDTO;
+import by.kovalski.alexsystem.dto.ScheduleDTO;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
 import by.kovalski.alexsystem.entity.Lesson;
@@ -26,4 +27,6 @@ public interface LessonService {
   List<Lesson> findByLecturer(Lecturer lecturer) throws ServiceException;
 
   Lesson getFromDTO(LessonDTO lessonDTO) throws ServiceException;
+
+  void createLessonsByScheduleDTO(ScheduleDTO scheduleDTO) throws ServiceException;
 }

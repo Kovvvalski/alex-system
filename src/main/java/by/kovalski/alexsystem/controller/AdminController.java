@@ -1,9 +1,6 @@
 package by.kovalski.alexsystem.controller;
 
-import by.kovalski.alexsystem.dto.CourseDTO;
-import by.kovalski.alexsystem.dto.GroupDTO;
-import by.kovalski.alexsystem.dto.LecturerDTO;
-import by.kovalski.alexsystem.dto.LessonDTO;
+import by.kovalski.alexsystem.dto.*;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
@@ -68,7 +65,7 @@ public class AdminController {
     try {
       courseService.save(courseService.getFromDTO(courseDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/new_course";
     }
@@ -81,7 +78,7 @@ public class AdminController {
     try {
       course = courseService.findByName(name);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       model.addAttribute(ERROR_MSG, e.getMessage());
       return ERROR_PAGE;
     }
@@ -97,7 +94,7 @@ public class AdminController {
     try {
       courseService.update(courseService.getFromDTO(courseDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
     }
     return "redirect:/admin/course/" + name;
@@ -108,7 +105,7 @@ public class AdminController {
     try {
       courseService.deleteByName(name);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/course/" + name;
     }
@@ -134,7 +131,7 @@ public class AdminController {
     try {
       groupService.save(groupService.getFromDTO(groupDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/new_group";
     }
@@ -147,7 +144,7 @@ public class AdminController {
     try {
       group = groupService.findByName(name);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       model.addAttribute(ERROR_MSG, e.getMessage());
       return ERROR_PAGE;
     }
@@ -169,7 +166,7 @@ public class AdminController {
     try {
       groupService.update(groupService.getFromDTO(groupDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
     }
     return "redirect:/admin/group/" + name;
@@ -180,7 +177,7 @@ public class AdminController {
     try {
       groupService.deleteByName(name);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/group/" + name;
     }
@@ -199,7 +196,7 @@ public class AdminController {
     try {
       lecturer = lecturerService.findById(id);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       model.addAttribute(ERROR_MSG, e.getMessage());
       return ERROR_PAGE;
     }
@@ -221,7 +218,7 @@ public class AdminController {
     try {
       lecturerService.save(lecturerService.getFromDTO(lecturerDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/new_lecturer";
     }
@@ -234,7 +231,7 @@ public class AdminController {
     try {
       lecturerService.update(lecturerService.getFromDTO(lecturerDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
     }
     return "redirect:/admin/lecturer/" + id;
@@ -245,7 +242,7 @@ public class AdminController {
     try {
       lecturerService.deleteById(id);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/lecturer/" + id;
     }
@@ -266,7 +263,7 @@ public class AdminController {
       model.addAttribute(GROUPS, groupService.findAllActive());
       model.addAttribute(LECTURERS, lecturerService.findAllActive());
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       model.addAttribute(ERROR_MSG, e.getMessage());
       return ERROR_PAGE;
     }
@@ -279,7 +276,7 @@ public class AdminController {
     try {
       lessonService.update(lessonService.getFromDTO(lessonDTO));
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
     }
     return "redirect:/admin/lesson/" + id;
@@ -298,7 +295,7 @@ public class AdminController {
     try {
       lessonService.save(lesson);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/new_lesson";
     }
@@ -310,9 +307,30 @@ public class AdminController {
     try {
       lessonService.deleteById(id);
     } catch (ServiceException e) {
-      logger.warn(e.getMessage());
+      logger.warn(e.getMessage(), e);
       redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
       return "redirect:/admin/lesson/" + id;
+    }
+    return "redirect:/admin";
+  }
+
+  @GetMapping("/admin/schedule")
+  public String schedule(Model model) {
+    model.addAttribute(SCHEDULE_DTO, new ScheduleDTO());
+    model.addAttribute(GROUPS, groupService.findAllActive());
+    model.addAttribute(LECTURERS, lecturerService.findAllActive());
+    return ADMIN_SCHEDULE;
+  }
+
+  @PostMapping("admin/schedule")
+  public String createSchedule(RedirectAttributes redirectAttributes,
+                               @ModelAttribute(SCHEDULE_DTO) ScheduleDTO scheduleDTO) {
+    try {
+      lessonService.createLessonsByScheduleDTO(scheduleDTO);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/schedule";
     }
     return "redirect:/admin";
   }

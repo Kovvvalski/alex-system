@@ -35,6 +35,7 @@ public class Lesson {
 
   @ManyToOne
   @JoinColumn(name = "lecturer_id")
+  @EqualsAndHashCode.Exclude
   private Lecturer lecturer;
 
   @Column(name = "home_task")

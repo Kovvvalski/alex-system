@@ -13,6 +13,7 @@ public class Attributes {
   public static final String COURSE_DTO = "courseDTO";
   public static final String GROUP_DTO = "groupDTO";
   public static final String LESSON_DTO = "lessonDTO";
+  public static final String SCHEDULE_DTO = "scheduleDTO";
 
   public static final String ERROR_MSG = "errorMessage";
 }

@@ -1,6 +1,7 @@
 package by.kovalski.alexsystem.service.impl;
 
 import by.kovalski.alexsystem.dto.LessonDTO;
+import by.kovalski.alexsystem.dto.ScheduleDTO;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
 import by.kovalski.alexsystem.entity.Lesson;
@@ -13,8 +14,11 @@ import by.kovalski.alexsystem.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -85,6 +89,42 @@ public class LessonServiceImpl implements LessonService {
             orElseThrow(() -> new ServiceException("No lecturer with id " + lessonDTO.getLecturerId()));
 
     return new Lesson(lessonDTO.getId(), group, lessonDTO.getBegin(), lessonDTO.getEnd(), lecturer, lessonDTO.getHomeTask());
+  }
+
+  @Override
+  public void createLessonsByScheduleDTO(ScheduleDTO scheduleDTO) throws ServiceException {
+    Group group = groupRepository.findById(scheduleDTO.getGroupName()).
+            orElseThrow(() -> new ServiceException("No group with name " + scheduleDTO.getGroupName()));
+
+    Lecturer lecturer = lecturerRepository.findById(scheduleDTO.getLecturerId()).
+            orElseThrow(() -> new ServiceException("No lecturer with id " + scheduleDTO.getLecturerId()));
+
+    LocalDate start = scheduleDTO.getStartDate();
+    LocalDate end = scheduleDTO.getEndDate();
+
+    if (start.isAfter(end) || start.isEqual(end)) {
+      throw new ServiceException("Start date equals or after end date");
+    }
+
+    Set<Lesson> lessons = new HashSet<>();
+
+    for (LocalDate beginOfEducationalWeek = start; beginOfEducationalWeek.isBefore(end);
+         beginOfEducationalWeek = beginOfEducationalWeek.plusWeeks(scheduleDTO.getPeriodicity().weeksNumber())) {
+
+      for (LocalDate dayOfEducationalWeek = beginOfEducationalWeek;
+           dayOfEducationalWeek.isBefore(beginOfEducationalWeek.plusDays(7));
+           dayOfEducationalWeek = dayOfEducationalWeek.plusDays(1)) {
+
+        if (scheduleDTO.getDaysOfWeek().contains(dayOfEducationalWeek.getDayOfWeek())) {
+          LocalDateTime beginDateTime = LocalDateTime.of(dayOfEducationalWeek, scheduleDTO.getBegin());
+          LocalDateTime endDateTime = beginDateTime.plusMinutes(scheduleDTO.getDuration());
+          Lesson lesson = new Lesson(null, group, beginDateTime, endDateTime, lecturer, null);
+          validate(lesson);
+          lessons.add(lesson);
+        }
+      }
+    }
+    lessonRepository.saveAllAndFlush(lessons);
   }
 
   static void validate(Lesson lesson) throws ServiceException {
