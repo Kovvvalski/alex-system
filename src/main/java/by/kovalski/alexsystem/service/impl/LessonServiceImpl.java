@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,6 +57,22 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
+  public void deleteAllByGroupName(String groupName) throws ServiceException {
+    if (!groupRepository.existsById(groupName)) {
+      throw new ServiceException("No group with name " + groupName);
+    }
+    lessonRepository.deleteAllByGroupName(groupName);
+  }
+
+  @Override
+  public void deleteAllByLecturerId(Long lecturerId) throws ServiceException {
+    if (!lecturerRepository.existsById(lecturerId)) {
+      throw new ServiceException("No lecturer with id " + lecturerId);
+    }
+    lessonRepository.deleteAllByLecturerId(lecturerId);
+  }
+
+  @Override
   public List<Lesson> findAll() {
     return lessonRepository.findAll();
   }
@@ -88,7 +105,12 @@ public class LessonServiceImpl implements LessonService {
     Lecturer lecturer = lecturerRepository.findById(lessonDTO.getLecturerId()).
             orElseThrow(() -> new ServiceException("No lecturer with id " + lessonDTO.getLecturerId()));
 
-    return new Lesson(lessonDTO.getId(), group, lessonDTO.getBegin(), lessonDTO.getEnd(), lecturer, lessonDTO.getHomeTask());
+    if (lessonDTO.getDuration() > 600) {
+      throw new ServiceException("You can't create lesson with duration more than 10 hours");
+    }
+
+    return new Lesson(lessonDTO.getId(), group, lessonDTO.getBegin(), lessonDTO.getBegin().plusMinutes(lessonDTO.getDuration()),
+            lecturer, lessonDTO.getHomeTask());
   }
 
   @Override
@@ -101,6 +123,11 @@ public class LessonServiceImpl implements LessonService {
 
     LocalDate start = scheduleDTO.getStartDate();
     LocalDate end = scheduleDTO.getEndDate();
+
+    long daysBetween = ChronoUnit.DAYS.between(start, end);
+    if (daysBetween > 365) {
+      throw new ServiceException("You can't make schedule more than 365 days");
+    }
 
     if (start.isAfter(end) || start.isEqual(end)) {
       throw new ServiceException("Start date equals or after end date");
@@ -132,7 +159,7 @@ public class LessonServiceImpl implements LessonService {
       throw new ServiceException("Begin is after end");
     }
     //TODO refactor time logic
-    if (lesson.getLecturer().getLessons().stream().anyMatch(l -> !lesson.getId().equals(l.getId()) && isTimeIntersection(lesson, l))) {
+    if (lesson.getLecturer().getLessons().stream().anyMatch(l -> !l.getId().equals(lesson.getId()) && isTimeIntersection(lesson, l))) {
       throw new ServiceException("This lesson has time intersection with selected lecturer");
     }
 

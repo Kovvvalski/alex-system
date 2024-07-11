@@ -291,9 +291,9 @@ public class AdminController {
   }
 
   @PostMapping("/admin/new_lesson")
-  public String saveNewLesson(@ModelAttribute(LESSON) Lesson lesson, RedirectAttributes redirectAttributes) {
+  public String saveNewLesson(@ModelAttribute(LESSON_DTO) LessonDTO lessonDTO, RedirectAttributes redirectAttributes) {
     try {
-      lessonService.save(lesson);
+      lessonService.save(lessonService.getFromDTO(lessonDTO));
     } catch (ServiceException e) {
       logger.warn(e.getMessage(), e);
       redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
@@ -312,6 +312,28 @@ public class AdminController {
       return "redirect:/admin/lesson/" + id;
     }
     return "redirect:/admin";
+  }
+
+  @PostMapping("/admin/delete_group_lessons/{groupName}")
+  public String deleteLessonsFromGroup(@PathVariable String groupName, RedirectAttributes redirectAttributes) {
+    try {
+      lessonService.deleteAllByGroupName(groupName);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+    }
+    return "redirect:/admin/group/" + groupName;
+  }
+
+  @PostMapping("/admin/delete_lecturer_lessons/{lecturerId}")
+  public String deleteLessonsFromLecturer(@PathVariable Long lecturerId, RedirectAttributes redirectAttributes) {
+    try {
+      lessonService.deleteAllByLecturerId(lecturerId);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addAttribute(ERROR_MSG, e.getMessage());
+    }
+    return "redirect:/admin/lecturer/" + lecturerId;
   }
 
   @GetMapping("/admin/schedule")

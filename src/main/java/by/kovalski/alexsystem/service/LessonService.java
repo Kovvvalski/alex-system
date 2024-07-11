@@ -16,6 +16,10 @@ public interface LessonService {
 
   void deleteById(Long id) throws ServiceException;
 
+  void deleteAllByGroupName(String groupName) throws ServiceException;
+
+  void deleteAllByLecturerId(Long lecturerId) throws ServiceException;
+
   List<Lesson> findAll();
 
   List<Lesson> findAllNotStarted();

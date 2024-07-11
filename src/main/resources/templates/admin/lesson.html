@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end-time">End Time</label>
-                    <input type="datetime-local" class="form-control" id="end-time" th:field="*{end}">
+                    <label for="end-time">Duration</label>
+                    <input type="number" min="1" max="600" class="form-control" id="end-time" th:field="*{duration}">
                 </div>
 
                 <div class="form-group">
@@ -49,15 +49,6 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Save Changes</button>
-
-                <script th:inline="javascript">
-                    /*<![CDATA[*/
-                    window.onload = function () {
-                        document.getElementById("begin-time").value = /*[[${lessonDTO.begin.toString()}]]*/ '2018-06-12T19:30';
-                        document.getElementById("end-time").value = /*[[${lessonDTO.end.toString()}]]*/ '2018-06-12T19:30';
-                    };
-                    /*]]>*/
-                </script>
             </form>
 
             <form th:action="@{/admin/lesson/delete/{id}(id=${lessonDTO.id})}" method="post">
@@ -69,5 +60,12 @@
         <span th:text="${errorMessage}"></span>
     </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.onload = function () {
+        document.getElementById("begin-time").value = /*[[${lessonDTO.begin.toString()}]]*/ '2018-06-12T19:30';
+    };
+    /*]]>*/
+</script>
 </body>
 </html>

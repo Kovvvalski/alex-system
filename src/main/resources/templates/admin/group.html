@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title th:text="${group.name}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
@@ -32,7 +33,9 @@
                         </option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
             </form>
             <form th:action="@{/admin/group/delete/{name}(name=${group.name})}" method="post">
                 <button type="submit" class="btn btn-danger">Delete Group</button>
@@ -40,21 +43,22 @@
         </div>
         <div class="col-md-3">
             <h3 class="mb-3">Students</h3>
-            <ul class="list-unstyled">
-                <li th:each="student : ${group.students}">
+            <div class="student-container">
+                <div class="student-item" th:each="student : ${group.students}">
                     <span th:text="${student.toString()}"></span>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
         <div class="col-md-3">
             <h3 class="mb-3">Lessons</h3>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" th:each="lesson : ${group.lessons}">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a th:href="@{/admin/lesson/{id}(id=${lesson.id})}" th:text="${lesson.toString()}"></a>
-                    </div>
-                </li>
-            </ul>
+            <div class="lesson-container">
+                <div class="lesson-item" th:each="lesson : ${group.lessons}">
+                    <a th:href="@{/admin/lesson/{id}(id=${lesson.id})}" th:text="${lesson.toString()}"></a>
+                </div>
+            </div>
+            <form th:action="@{/admin/delete_group_lessons/{groupName}(groupName=${group.name})}" method="post">
+                <button type="submit" class="btn btn-danger">Delete All Lessons</button>
+            </form>
         </div>
     </div>
     <div th:if="${errorMessage != null}" class="alert alert-danger mt-3" role="alert">

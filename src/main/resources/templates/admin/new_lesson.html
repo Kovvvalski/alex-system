@@ -25,11 +25,11 @@
         </div>
         <div class="form-group">
             <label for="startTime">Start Time</label>
-            <input type="datetime-local" class="form-control" id="startTime" th:field="*{begin}">
+            <input type="datetime-local" class="form-control" id="startTime" th:field="*{begin}" required>
         </div>
         <div class="form-group">
-            <label for="endTime">End Time</label>
-            <input type="datetime-local" class="form-control" id="endTime" th:field="*{end}">
+            <label for="endTime">Duration</label>
+            <input type="number" min="1" max="600" class="form-control" id="endTime" th:field="*{duration}" required>
         </div>
         <div class="form-group">
             <label for="homework">Home task</label>

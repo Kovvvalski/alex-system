@@ -1,0 +1,37 @@
+.lesson-container, .student-container {
+    height: 300px;
+    overflow-y: auto;
+    white-space: normal;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-item, .student-item {
+    display: block;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+.lesson-item:hover, .student-item:hover {
+    background-color: #f2f2f2;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-item a, .student-item a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.lesson-item a:hover, .student-item a:hover {
+    color: #000;
+}

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class LessonDTO {
   private Long id;
   private String groupName;
   private LocalDateTime begin;
-  private LocalDateTime end;
+  private int duration;
   private Long lecturerId;
   private String homeTask;
 
@@ -24,7 +25,7 @@ public class LessonDTO {
     id = lesson.getId();
     groupName = lesson.getGroup().getName();
     begin = lesson.getBegin();
-    end = lesson.getEnd();
+    duration = (int) ChronoUnit.MINUTES.between(begin, lesson.getEnd());
     lecturerId = lesson.getLecturer().getId();
     homeTask = lesson.getHomeTask();
   }
