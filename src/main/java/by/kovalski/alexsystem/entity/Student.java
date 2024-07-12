@@ -3,6 +3,7 @@ package by.kovalski.alexsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Student extends AbstractPerson {
-  private static final String PARENT_COL = "parent_id";
 
   @ManyToMany
   @JoinTable(name = "students_groups",
@@ -27,4 +27,16 @@ public class Student extends AbstractPerson {
 
   @OneToMany(mappedBy = "student")
   private List<Activity> activities;
+
+  @Column(name = "birthdate")
+  private LocalDate birthDate;
+
+  public Student(Long id, String firstName, String secondName, String thirdName, String telephoneNumber, String email,
+                 Status status, List<Group> groups, Parent parent, List<Activity> activities, LocalDate birthDate) {
+    super(id, firstName, secondName, thirdName, telephoneNumber, email, status);
+    this.groups = groups;
+    this.parent = parent;
+    this.activities = activities;
+    this.birthDate = birthDate;
+  }
 }

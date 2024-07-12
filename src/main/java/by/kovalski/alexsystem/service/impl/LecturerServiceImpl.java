@@ -10,6 +10,7 @@ import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.repository.LecturerRepository;
 import by.kovalski.alexsystem.repository.LessonRepository;
 import by.kovalski.alexsystem.service.LecturerService;
+import by.kovalski.alexsystem.service.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +38,6 @@ public class LecturerServiceImpl implements LecturerService {
   public void save(Lecturer lecturer) throws ServiceException {
     validate(lecturer);
 
-    if (lecturerRepository.existsByEmail(lecturer.getEmail())) {
-      throw new ServiceException("Lecturer with email " + lecturer.getEmail() + " already exists");
-    }
-
     if (lecturerRepository.existsByTelephoneNumber(lecturer.getTelephoneNumber())) {
       throw new ServiceException("Lecturer with telephone number " + lecturer.getTelephoneNumber() +
               " already exists");
@@ -59,10 +56,6 @@ public class LecturerServiceImpl implements LecturerService {
 
     if (!lecturerRepository.existsById(lecturer.getId())) {
       throw new ServiceException("Lecturer with id " + lecturer.getId() + " not exists");
-    }
-
-    if (lecturerRepository.existsByEmailAndIdNot(lecturer.getEmail(), lecturer.getId())) {
-      throw new ServiceException("Lecturer with email " + lecturer.getEmail() + " already exists");
     }
 
     if (lecturerRepository.existsByTelephoneNumberAndIdNot(lecturer.getTelephoneNumber(), lecturer.getId())) {
@@ -124,13 +117,7 @@ public class LecturerServiceImpl implements LecturerService {
   }
 
   static void validate(Lecturer lecturer) throws ServiceException {
-    if (!lecturer.getEmail().matches(EMAIL_REGEX)) {
-      throw new ServiceException("Not valid email");
-    }
-
-    if (!lecturer.getTelephoneNumber().matches(TELEPHONE_NUMBER_REGEX)) {
-      throw new ServiceException("Not valid telephone number");
-    }
+    ServiceUtil.validateAbstractPerson(lecturer);
 
     if (lecturer.getStatus() == Status.NON_ACTIVE &&
             lecturer.getLessons().stream().anyMatch(l -> l.getBegin().isAfter(LocalDateTime.now()))) {

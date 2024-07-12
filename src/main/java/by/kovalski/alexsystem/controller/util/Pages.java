@@ -15,6 +15,12 @@ public class Pages {
   public static final String ADMIN_LESSON = "admin/lesson";
   public static final String ADMIN_NEW_LESSON = "admin/new_lesson";
   public static final String ADMIN_SCHEDULE = "admin/schedule";
+  public static final String ADMIN_NEW_PARENT = "admin/new_parent";
+  public static final String ADMIN_PARENT = "admin/parent";
+  public static final String ADMIN_PARENTS = "admin/parents";
+  public static final String ADMIN_NEW_STUDENT = "admin/new_student";
+  public static final String ADMIN_STUDENT = "admin/student";
+  public static final String ADMIN_STUDENTS = "admin/student";
 
   public static final String ERROR_PAGE = "error_page";
 }

@@ -1,15 +1,9 @@
 package by.kovalski.alexsystem.controller;
 
 import by.kovalski.alexsystem.dto.*;
-import by.kovalski.alexsystem.entity.Course;
-import by.kovalski.alexsystem.entity.Group;
-import by.kovalski.alexsystem.entity.Lecturer;
-import by.kovalski.alexsystem.entity.Lesson;
+import by.kovalski.alexsystem.entity.*;
 import by.kovalski.alexsystem.exception.ServiceException;
-import by.kovalski.alexsystem.service.CourseService;
-import by.kovalski.alexsystem.service.GroupService;
-import by.kovalski.alexsystem.service.LecturerService;
-import by.kovalski.alexsystem.service.LessonService;
+import by.kovalski.alexsystem.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +25,19 @@ public class AdminController {
   private final GroupService groupService;
   private final LecturerService lecturerService;
   private final LessonService lessonService;
+  private final StudentService studentService;
+  private final ParentService parentService;
 
   @Autowired
   public AdminController(CourseService courseService, GroupService groupService,
-                         LecturerService lecturerService, LessonService lessonService) {
+                         LecturerService lecturerService, LessonService lessonService,
+                         ParentService parentService, StudentService studentService) {
     this.courseService = courseService;
     this.groupService = groupService;
     this.lecturerService = lecturerService;
     this.lessonService = lessonService;
+    this.parentService = parentService;
+    this.studentService = studentService;
   }
 
   @GetMapping("/admin")
@@ -355,5 +354,68 @@ public class AdminController {
       return "redirect:/admin/schedule";
     }
     return "redirect:/admin";
+  }
+
+  @GetMapping("admin/new_parent")
+  public String newParent(Model model) {
+    model.addAttribute(PARENT_DTO, new ParentDTO());
+    return ADMIN_NEW_PARENT;
+  }
+
+  @PostMapping("admin/new_parent")
+  public String saveNewParent(@ModelAttribute(PARENT_DTO) ParentDTO parentDTO, RedirectAttributes redirectAttributes) {
+    try {
+      parentService.save(parentService.getFromDTO(parentDTO));
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/new_parent";
+    }
+    return "redirect:/admin";
+  }
+
+  @GetMapping("admin/parent/{id}")
+  public String parent(@PathVariable Long id, Model model) {
+    Parent parent;
+    try {
+      parent = parentService.findById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      model.addAttribute(ERROR_MSG, e.getMessage());
+      return ERROR_PAGE;
+    }
+    model.addAttribute(PARENT, parent);
+    model.addAttribute(PARENT_DTO, new ParentDTO(parent));
+    return ADMIN_PARENT;
+  }
+
+  @GetMapping("admin/parents")
+  public String parents(Model model) {
+    model.addAttribute(PARENTS, parentService.findAll());
+    return ADMIN_PARENTS;
+  }
+
+  @PostMapping("/admin/parent/update/{id}")
+  public String updateParent(@ModelAttribute(PARENT_DTO) ParentDTO parentDTO, @PathVariable Long id,
+                             RedirectAttributes redirectAttributes) {
+    try {
+      parentService.update(parentService.getFromDTO(parentDTO));
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+    }
+    return "redirect:/admin/parent/" + id;
+  }
+
+  @PostMapping("/admin/parent/delete/{id}")
+  public String deleteParent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    try {
+      parentService.deleteById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/parent/" + id;
+    }
+    return "redirect:/admin/parents";
   }
 }

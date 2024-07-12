@@ -14,6 +14,12 @@ public class Attributes {
   public static final String GROUP_DTO = "groupDTO";
   public static final String LESSON_DTO = "lessonDTO";
   public static final String SCHEDULE_DTO = "scheduleDTO";
+  public static final String PARENT_DTO = "parentDTO";
+  public static final String PARENTS = "parents";
+  public static final String PARENT = "parent";
+  public static final String STUDENT = "student";
+  public static final String STUDENTS = "students";
+  public static final String STUDENT_DTO = "studentDTO";
 
   public static final String ERROR_MSG = "errorMessage";
 }

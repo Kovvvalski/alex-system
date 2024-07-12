@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
   List<Student> findAllByGroups(List<Group> groups);
+
+  List<Student> findAllByParentId(Long id);
 }

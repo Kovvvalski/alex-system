@@ -31,10 +31,10 @@ public abstract class AbstractPerson {
   @Column(name = "third_name")
   private String thirdName;
 
-  @Column(name = "telephone_number", unique = true, nullable = false)
+  @Column(name = "telephone_number")
   private String telephoneNumber;
 
-  @Column(name = "email", unique = true, nullable = false)
+  @Column(name = "email")
   private String email;
 
   @Column(name = "status")
