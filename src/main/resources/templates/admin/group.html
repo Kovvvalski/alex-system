@@ -45,7 +45,7 @@
             <h3 class="mb-3">Students</h3>
             <div class="student-container">
                 <div class="student-item" th:each="student : ${group.students}">
-                    <span th:text="${student.toString()}"></span>
+                    <a th:href="@{/admin/student/{id}(id=${student.id})}" th:text="${student.toString()}"></a>
                 </div>
             </div>
         </div>

@@ -11,6 +11,8 @@ public interface ParentService {
 
   List<Parent> findAll();
 
+  List<Parent> findAllActive();
+
   void update(Parent parent) throws ServiceException;
 
   void save(Parent parent) throws ServiceException;

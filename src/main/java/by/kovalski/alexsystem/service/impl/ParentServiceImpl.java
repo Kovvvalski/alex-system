@@ -2,6 +2,7 @@ package by.kovalski.alexsystem.service.impl;
 
 import by.kovalski.alexsystem.dto.ParentDTO;
 import by.kovalski.alexsystem.entity.Parent;
+import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.entity.Student;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.ParentRepository;
@@ -33,6 +34,11 @@ public class ParentServiceImpl implements ParentService {
   @Override
   public List<Parent> findAll() {
     return parentRepository.findAll();
+  }
+
+  @Override
+  public List<Parent> findAllActive() {
+    return parentRepository.findAllByStatus(Status.ACTIVE);
   }
 
   @Override

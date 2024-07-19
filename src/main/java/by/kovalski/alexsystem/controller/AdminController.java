@@ -391,7 +391,7 @@ public class AdminController {
 
   @GetMapping("admin/parents")
   public String parents(Model model) {
-    model.addAttribute(PARENTS, parentService.findAll());
+    model.addAttribute(PARENTS, parentService.findAllActive());
     return ADMIN_PARENTS;
   }
 
@@ -417,5 +417,72 @@ public class AdminController {
       return "redirect:/admin/parent/" + id;
     }
     return "redirect:/admin/parents";
+  }
+
+  @GetMapping("admin/new_student")
+  public String newStudent(Model model) {
+    model.addAttribute(GROUPS, groupService.findAllActive());
+    model.addAttribute(PARENTS, parentService.findAllActive());
+    model.addAttribute(STUDENT_DTO, new StudentDTO());
+    return ADMIN_NEW_STUDENT;
+  }
+
+  @PostMapping("admin/new_student")
+  public String saveNewStudent(@ModelAttribute(STUDENT_DTO) StudentDTO studentDTO, RedirectAttributes redirectAttributes) {
+    try {
+      studentService.save(studentService.getFromDTO(studentDTO));
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/new_student";
+    }
+    return "redirect:/admin";
+  }
+
+  @GetMapping("admin/student/{id}")
+  public String student(Model model, @PathVariable Long id) {
+    Student student;
+    try {
+      student = studentService.findById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      model.addAttribute(ERROR_MSG, e.getMessage());
+      return ERROR_PAGE;
+    }
+    model.addAttribute(GROUPS, groupService.findAllActive());
+    model.addAttribute(PARENTS, parentService.findAllActive());
+    model.addAttribute(STUDENT_DTO, new StudentDTO(student));
+    model.addAttribute(STUDENT, student);
+    return ADMIN_STUDENT;
+  }
+
+  @GetMapping("admin/students")
+  public String students(Model model) {
+    model.addAttribute(STUDENTS, studentService.findAllActive());
+    return ADMIN_STUDENTS;
+  }
+
+  @PostMapping("admin/student/update/{id}")
+  public String updateStudent(@ModelAttribute(STUDENT_DTO) StudentDTO studentDTO, @PathVariable Long id,
+                             RedirectAttributes redirectAttributes) {
+    try {
+      studentService.update(studentService.getFromDTO(studentDTO));
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+    }
+    return "redirect:/admin/student/" + id;
+  }
+
+  @PostMapping("admin/student/delete/{id}")
+  public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    try {
+      studentService.deleteById(id);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/student/" + id;
+    }
+    return "redirect:/admin/students";
   }
 }

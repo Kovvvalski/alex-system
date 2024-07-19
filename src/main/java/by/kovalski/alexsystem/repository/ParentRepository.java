@@ -1,8 +1,11 @@
 package by.kovalski.alexsystem.repository;
 
 import by.kovalski.alexsystem.entity.Parent;
+import by.kovalski.alexsystem.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ParentRepository extends JpaRepository<Parent, Long> {
+import java.util.List;
 
+public interface ParentRepository extends JpaRepository<Parent, Long> {
+  List<Parent> findAllByStatus(Status status);
 }

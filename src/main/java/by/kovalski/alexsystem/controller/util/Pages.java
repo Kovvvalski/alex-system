@@ -20,7 +20,7 @@ public class Pages {
   public static final String ADMIN_PARENTS = "admin/parents";
   public static final String ADMIN_NEW_STUDENT = "admin/new_student";
   public static final String ADMIN_STUDENT = "admin/student";
-  public static final String ADMIN_STUDENTS = "admin/student";
+  public static final String ADMIN_STUDENTS = "admin/students";
 
   public static final String ERROR_PAGE = "error_page";
 }
