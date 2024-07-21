@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title th:text="${parent.toString()}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
@@ -11,7 +12,7 @@
     <h1 th:text="${parent.toString()}"></h1>
     <div class="row">
         <div class="col-md-6">
-            <form th:action="@{/admin/parent/update/{id}(id=${parent.id})}" th:object="${parentDTO}" method="post">
+            <form th:action="@{/admin/parent/update/{id}(id=${parent.id})}" th:object="${parentDTO}" method="post" role="form">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
                     <input type="text" class="form-control" id="firstName" th:field="*{firstName}"/>
@@ -53,9 +54,9 @@
         <div class="col-md-3">
             <h3 class="mb-3">Wards</h3>
             <div>
-                <div th:each="ward : ${parent.wards}">
+                <div class="student-item" th:each="ward : ${parent.wards}">
                     <a th:href="@{/admin/student/{id}(id=${ward.id})}" th:text="${ward.toString()}"
-                       class="btn btn-outline-primary btn-sm"></a>
+                       class="student-container"></a>
                 </div>
             </div>
         </div>

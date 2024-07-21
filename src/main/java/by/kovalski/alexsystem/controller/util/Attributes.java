@@ -20,6 +20,9 @@ public class Attributes {
   public static final String STUDENT = "student";
   public static final String STUDENTS = "students";
   public static final String STUDENT_DTO = "studentDTO";
+  public static final String USER = "user";
+  public static final String USERS = "users";
+  public static final String USER_DTO = "userDTO";
 
   public static final String ERROR_MSG = "errorMessage";
 }

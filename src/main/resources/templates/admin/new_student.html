@@ -9,7 +9,7 @@
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
 <div class="container my-5">
     <h1 class="mb-4">Add new student</h1>
-    <form th:action="@{/admin/new_student}" method="post" th:object="${studentDTO}">
+    <form th:action="@{/admin/new_student}" method="post" th:object="${studentDTO}" role="form">
         <div class="form-group">
             <label for="firstName">First name</label>
             <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
@@ -32,7 +32,7 @@
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" th:field="*{email}" required>
+            <input type="email" class="form-control" id="email" th:field="*{email}" required>
         </div>
 
         <div class="form-group">

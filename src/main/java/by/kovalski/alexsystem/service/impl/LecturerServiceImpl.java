@@ -14,8 +14,6 @@ import by.kovalski.alexsystem.service.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static by.kovalski.alexsystem.service.ServiceUtil.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,10 +107,8 @@ public class LecturerServiceImpl implements LecturerService {
     for (String course : lecturerDTO.getCourses()) {
       courses.add(courseRepository.findById(course).orElseThrow(() -> new ServiceException("No course with name " + course)));
     }
-    List<Lesson> lessons = lessonRepository.findAllByLecturer(lecturer);
 
     lecturer.setCourses(courses);
-    lecturer.setLessons(lessons);
     return lecturer;
   }
 

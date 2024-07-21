@@ -9,7 +9,7 @@
 <div th:replace="~{fragments/admin_header :: admin_header}"></div>
 <div class="container my-5">
     <h1 class="mb-4">Add new lesson</h1>
-    <form th:action="@{/admin/new_lesson}" method="post" th:object="${lessonDTO}">
+    <form th:action="@{/admin/new_lesson}" method="post" th:object="${lessonDTO}" role="form">
         <div class="form-group">
             <label for="group">Group</label>
             <select class="form-control" id="group" th:field="*{groupName}" required>

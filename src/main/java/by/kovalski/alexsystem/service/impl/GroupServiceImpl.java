@@ -7,7 +7,6 @@ import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
 import by.kovalski.alexsystem.repository.GroupRepository;
-import by.kovalski.alexsystem.repository.StudentRepository;
 import by.kovalski.alexsystem.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group findByName(String name) throws ServiceException {
+  public Group findById(String name) throws ServiceException {
     return groupRepository.findById(name).orElseThrow(() -> new ServiceException("No group with name " + name));
   }
 
@@ -66,7 +65,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public void deleteByName(String name) throws ServiceException {
+  public void deleteById(String name) throws ServiceException {
     Group group = groupRepository.findById(name).orElseThrow(() -> new ServiceException("No group with name " + name));
     if (!group.getStudents().isEmpty() || !group.getLessons().isEmpty()) {
       throw new ServiceException("Impossible delete: this group has students or lessons");

@@ -1,5 +1,12 @@
 package by.kovalski.alexsystem.entity;
 
-public enum Role {
-  ADMIN, LECTURER, STUDENT
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+  ADMIN, LECTURER, STUDENT;
+
+  @Override
+  public String getAuthority() {
+    return name();
+  }
 }

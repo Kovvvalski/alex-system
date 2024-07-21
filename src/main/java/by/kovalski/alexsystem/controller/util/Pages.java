@@ -22,5 +22,7 @@ public class Pages {
   public static final String ADMIN_STUDENT = "admin/student";
   public static final String ADMIN_STUDENTS = "admin/students";
 
+  public static final String LOGIN = "user/login";
+
   public static final String ERROR_PAGE = "error_page";
 }

@@ -9,28 +9,17 @@ import by.kovalski.alexsystem.exception.ServiceException;
 
 import java.util.List;
 
-public interface LessonService {
-  void save(Lesson lesson) throws ServiceException;
-
-  void update(Lesson lesson) throws ServiceException;
-
-  void deleteById(Long id) throws ServiceException;
+public interface LessonService extends BaseService<Lesson, Long, LessonDTO> {
 
   void deleteAllByGroupName(String groupName) throws ServiceException;
 
   void deleteAllByLecturerId(Long lecturerId) throws ServiceException;
 
-  List<Lesson> findAll();
-
   List<Lesson> findAllNotStarted();
-
-  Lesson findById(Long id) throws ServiceException;
 
   List<Lesson> findByGroup(Group group) throws ServiceException;
 
   List<Lesson> findByLecturer(Lecturer lecturer) throws ServiceException;
-
-  Lesson getFromDTO(LessonDTO lessonDTO) throws ServiceException;
 
   void createLessonsByScheduleDTO(ScheduleDTO scheduleDTO) throws ServiceException;
 }

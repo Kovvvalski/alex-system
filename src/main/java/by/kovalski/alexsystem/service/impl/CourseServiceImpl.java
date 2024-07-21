@@ -2,7 +2,6 @@ package by.kovalski.alexsystem.service.impl;
 
 import by.kovalski.alexsystem.dto.CourseDTO;
 import by.kovalski.alexsystem.entity.Course;
-import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
@@ -26,7 +25,7 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public Course findByName(String name) throws ServiceException {
+  public Course findById(String name) throws ServiceException {
     return courseRepository.findById(name).orElseThrow(() -> new ServiceException("No course with name " + name));
   }
 
@@ -49,7 +48,7 @@ public class CourseServiceImpl implements CourseService {
   }
 
   @Override
-  public void deleteByName(String name) throws ServiceException {
+  public void deleteById(String name) throws ServiceException {
     Course course = courseRepository.findById(name).orElseThrow(() -> new ServiceException("No course with name " +
             name));
     if (!course.getGroups().isEmpty()) {

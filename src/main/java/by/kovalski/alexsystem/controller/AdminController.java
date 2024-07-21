@@ -75,7 +75,7 @@ public class AdminController {
   public String course(Model model, @PathVariable String name) {
     Course course;
     try {
-      course = courseService.findByName(name);
+      course = courseService.findById(name);
     } catch (ServiceException e) {
       logger.warn(e.getMessage(), e);
       model.addAttribute(ERROR_MSG, e.getMessage());
@@ -102,7 +102,7 @@ public class AdminController {
   @PostMapping("/admin/course/delete/{name}")
   public String deleteCourse(@PathVariable String name, RedirectAttributes redirectAttributes) {
     try {
-      courseService.deleteByName(name);
+      courseService.deleteById(name);
     } catch (ServiceException e) {
       logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
@@ -141,7 +141,7 @@ public class AdminController {
   public String group(Model model, @PathVariable String name) {
     Group group;
     try {
-      group = groupService.findByName(name);
+      group = groupService.findById(name);
     } catch (ServiceException e) {
       logger.warn(e.getMessage(), e);
       model.addAttribute(ERROR_MSG, e.getMessage());
@@ -174,7 +174,7 @@ public class AdminController {
   @PostMapping("/admin/group/delete/{name}")
   public String deleteGroup(@PathVariable String name, RedirectAttributes redirectAttributes) {
     try {
-      groupService.deleteByName(name);
+      groupService.deleteById(name);
     } catch (ServiceException e) {
       logger.warn(e.getMessage(), e);
       redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());

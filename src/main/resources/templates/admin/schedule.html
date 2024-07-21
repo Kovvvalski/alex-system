@@ -11,7 +11,7 @@
     <h1>Schedule</h1>
     <div class="row">
         <div class="col-md-6">
-            <form th:action="@{/admin/schedule}" th:object="${scheduleDTO}" method="post">
+            <form th:action="@{/admin/schedule}" th:object="${scheduleDTO}" method="post" role="form">
                 <div class="form-group">
                     <label for="group_name">Group</label>
                     <select class="form-control" id="group_name" th:field="*{groupName}" required>
