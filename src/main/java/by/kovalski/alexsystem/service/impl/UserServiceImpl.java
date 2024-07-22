@@ -30,34 +30,42 @@ public class UserServiceImpl implements UserService, UserDetailsService {
   @Override
   public void save(User user) throws ServiceException {
     if (userRepository.existsById(user.getLogin())) {
-      throw new ServiceException("User with login already exists");
+      throw new ServiceException("User with login " + user.getLogin() + " already exists");
     }
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    userRepository.save(user);
+    userRepository.saveAndFlush(user);
   }
 
   @Override
-  public User findById(String s) throws ServiceException {
-    return null;
+  public User findById(String id) throws ServiceException {
+    return userRepository.findById(id).
+            orElseThrow(() -> new ServiceException("No user with login " + id));
   }
 
   @Override
-  public void update(User obj) throws ServiceException {
-
+  public void update(User user) throws ServiceException {
+    if (!userRepository.existsById(user.getLogin())) {
+      throw new ServiceException("No user with login " + user.getLogin());
+    }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    userRepository.saveAndFlush(user);
   }
 
   @Override
-  public void deleteById(String s) throws ServiceException {
-
+  public void deleteById(String id) throws ServiceException {
+    if (!userRepository.existsById(id)) {
+      throw new ServiceException("No user with login " + id);
+    }
+    userRepository.deleteById(id);
   }
 
   @Override
   public List<User> findAll() {
-    return null;
+    return userRepository.findAll();
   }
 
   @Override
-  public User getFromDTO(UserDTO userDTO) throws ServiceException {
+  public User getFromDTO(UserDTO userDTO) {
     return new User(userDTO.getLogin(), userDTO.getPassword(), userDTO.getRole(), null);
   }
 

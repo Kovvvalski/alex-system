@@ -21,6 +21,9 @@ public class Pages {
   public static final String ADMIN_NEW_STUDENT = "admin/new_student";
   public static final String ADMIN_STUDENT = "admin/student";
   public static final String ADMIN_STUDENTS = "admin/students";
+  public static final String ADMIN_NEW_USER = "admin/new_user";
+  public static final String ADMIN_USER = "admin/user";
+  public static final String ADMIN_USERS = "admin/users";
 
   public static final String LOGIN = "user/login";
 

@@ -23,6 +23,9 @@ public class Attributes {
   public static final String USER = "user";
   public static final String USERS = "users";
   public static final String USER_DTO = "userDTO";
+  public static final String ABSTRACT_PERSONS = "abstractPersons";
+  public static final String ABSTRACT_PERSON = "abstractPerson";
+  public static final String USER_TYPE = "userType";
 
   public static final String ERROR_MSG = "errorMessage";
 }

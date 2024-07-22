@@ -77,6 +77,27 @@
             </a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <h2>Users management</h2>
+            <a th:href="@{/admin/users}" class="btn btn-primary btn-block">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a th:href="@{/admin/new_user/STUDENT}" class="btn btn-primary btn-block">
+                <i class="fas fa-users"></i> New user-student
+            </a>
+
+
+            <a th:href="@{/admin/new_user/LECTURER}" class="btn btn-primary btn-block">
+                <i class="fas fa-users"></i> New user-lecturer
+            </a>
+
+            <a th:href="@{/admin/new_user/ADMIN}" class="btn btn-primary btn-block">
+                <i class="fas fa-users"></i> New user-admin
+            </a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

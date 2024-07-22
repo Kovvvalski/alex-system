@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Cacheable
 @Table(name = "users")
 @Getter
 @Setter

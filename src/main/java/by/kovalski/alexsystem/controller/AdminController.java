@@ -27,17 +27,19 @@ public class AdminController {
   private final LessonService lessonService;
   private final StudentService studentService;
   private final ParentService parentService;
+  private final UserService userService;
 
   @Autowired
-  public AdminController(CourseService courseService, GroupService groupService,
-                         LecturerService lecturerService, LessonService lessonService,
-                         ParentService parentService, StudentService studentService) {
+  public AdminController(CourseService courseService, GroupService groupService, LecturerService lecturerService,
+                         LessonService lessonService, StudentService studentService, ParentService parentService,
+                         UserService userService) {
     this.courseService = courseService;
     this.groupService = groupService;
     this.lecturerService = lecturerService;
     this.lessonService = lessonService;
-    this.parentService = parentService;
     this.studentService = studentService;
+    this.parentService = parentService;
+    this.userService = userService;
   }
 
   @GetMapping("/admin")
@@ -464,7 +466,7 @@ public class AdminController {
 
   @PostMapping("admin/student/update/{id}")
   public String updateStudent(@ModelAttribute(STUDENT_DTO) StudentDTO studentDTO, @PathVariable Long id,
-                             RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes) {
     try {
       studentService.update(studentService.getFromDTO(studentDTO));
     } catch (ServiceException e) {
@@ -484,5 +486,81 @@ public class AdminController {
       return "redirect:/admin/student/" + id;
     }
     return "redirect:/admin/students";
+  }
+
+  @GetMapping("admin/new_user/{userType}")
+  public String newUser(Model model, @PathVariable String userType) {
+    UserDTO userDTO = new UserDTO();
+    if (userType.equals(Role.STUDENT.name())) {
+      model.addAttribute(ABSTRACT_PERSONS, studentService.findAllActive());
+      userDTO.setRole(Role.STUDENT);
+    } else if (userType.equals(Role.LECTURER.name())) {
+      model.addAttribute(ABSTRACT_PERSONS, lecturerService.findAllActive());
+      userDTO.setRole(Role.LECTURER);
+    } else if (userType.equals(Role.ADMIN.name())) {
+      model.addAttribute(ABSTRACT_PERSONS, List.of());
+      userDTO.setRole(Role.ADMIN);
+    } else {
+      throw new IllegalArgumentException("Unresolved user-type " + userType);
+    }
+    model.addAttribute(USER_TYPE, userType);
+    model.addAttribute(USER_DTO, userDTO);
+    return ADMIN_NEW_USER;
+  }
+
+  @PostMapping("admin/new_user/{userType}")
+  public String saveNewUser(@ModelAttribute(USER_DTO) UserDTO userDTO, RedirectAttributes redirectAttributes,
+                            @PathVariable String userType) {
+    try {
+      User user = userService.getFromDTO(userDTO);
+      if (userType.equals(Role.STUDENT.name())) {
+        user.setData(studentService.findById(userDTO.getDataId()));
+      } else if (userType.equals(Role.LECTURER.name())) {
+        user.setData(lecturerService.findById(userDTO.getDataId()));
+      } else if (userType.equals(Role.ADMIN.name())) {
+        user.setData(null);
+      } else {
+        throw new IllegalArgumentException("Unresolved user-type " + userType);
+      }
+      userService.save(user);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/new_user/" + userType;
+    }
+    return "redirect:/admin";
+  }
+
+  @GetMapping("admin/user/{login}")
+  public String user(Model model, @PathVariable String login) {
+    User user;
+    try {
+      user = userService.findById(login);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      model.addAttribute(ERROR_MSG, e.getMessage());
+      return ERROR_PAGE;
+    }
+    model.addAttribute(USER, user);
+    model.addAttribute(ABSTRACT_PERSON, user.getData());
+    return ADMIN_USER;
+  }
+
+  @GetMapping("admin/users")
+  public String users(Model model) {
+    model.addAttribute(USERS, userService.findAll());
+    return ADMIN_USERS;
+  }
+
+  @PostMapping("admin/user/delete/{login}")
+  public String deleteUser(@PathVariable String login, RedirectAttributes redirectAttributes) {
+    try {
+      userService.deleteById(login);
+    } catch (ServiceException e) {
+      logger.warn(e.getMessage(), e);
+      redirectAttributes.addFlashAttribute(ERROR_MSG, e.getMessage());
+      return "redirect:/admin/user/" + login;
+    }
+    return "redirect:/admin/users";
   }
 }
