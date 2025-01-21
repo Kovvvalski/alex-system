@@ -2,7 +2,6 @@ package by.kovalski.alexsystem.repository;
 
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
-import by.kovalski.alexsystem.entity.Lesson;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

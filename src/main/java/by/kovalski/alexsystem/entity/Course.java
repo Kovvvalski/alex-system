@@ -19,17 +19,20 @@ public class Course {
   private static final int DESCRIPTION_LENGTH = 1000;
 
   @Id
+  @Column(name="course_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String name;
 
   @Column(length = DESCRIPTION_LENGTH)
   private String description;
 
-  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
   @EqualsAndHashCode.Exclude
   private List<Group> groups;
 
-  @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @EqualsAndHashCode.Exclude
+  @ManyToMany(mappedBy = "courses", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   private List<Lecturer> lecturers;
 
   @Column(name = "status")

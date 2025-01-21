@@ -15,11 +15,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GroupDTO {
   private String name;
-  private String courseName;
+  private Long courseId;
   private Status status;
 
   public GroupDTO(Group group) {
-    this.courseName = group.getCourse().getName();
+    this.courseId = group.getCourse().getId();
     this.status = group.getStatus();
   }
 }

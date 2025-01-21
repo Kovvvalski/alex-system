@@ -3,12 +3,13 @@ package by.kovalski.alexsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import java.util.List;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "groups")
 @Getter
 @Setter
@@ -18,6 +19,10 @@ import java.util.List;
 public class Group {
 
   @Id
+  @Column(name = "group_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String name;
 
   @ManyToOne
@@ -28,10 +33,9 @@ public class Group {
   @EqualsAndHashCode.Exclude
   private List<Student> students;
 
-  @OneToMany(mappedBy = "group")
-  @OrderBy("begin ASC")
-  @EqualsAndHashCode.Exclude
-  private List<Lesson> lessons;
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "schedule_id")
+  private Schedule schedule;
 
   @Column(name = "status")
   @Enumerated(EnumType.STRING)

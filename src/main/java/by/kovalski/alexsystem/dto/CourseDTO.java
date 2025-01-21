@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseDTO {
+  private Long id;
   private String name;
   private String description;
   private Status status;

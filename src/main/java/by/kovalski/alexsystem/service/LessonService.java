@@ -1,10 +1,8 @@
 package by.kovalski.alexsystem.service;
 
-import by.kovalski.alexsystem.dto.LessonDTO;
 import by.kovalski.alexsystem.dto.ScheduleDTO;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
-import by.kovalski.alexsystem.entity.Lesson;
 import by.kovalski.alexsystem.exception.ServiceException;
 
 import java.util.List;

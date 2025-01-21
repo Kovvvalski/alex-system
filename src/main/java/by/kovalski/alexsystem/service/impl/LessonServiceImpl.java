@@ -1,10 +1,8 @@
 package by.kovalski.alexsystem.service.impl;
 
-import by.kovalski.alexsystem.dto.LessonDTO;
 import by.kovalski.alexsystem.dto.ScheduleDTO;
 import by.kovalski.alexsystem.entity.Group;
 import by.kovalski.alexsystem.entity.Lecturer;
-import by.kovalski.alexsystem.entity.Lesson;
 import by.kovalski.alexsystem.entity.Student;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.GroupRepository;

@@ -3,7 +3,6 @@ package by.kovalski.alexsystem.service.impl;
 import by.kovalski.alexsystem.dto.LecturerDTO;
 import by.kovalski.alexsystem.entity.Course;
 import by.kovalski.alexsystem.entity.Lecturer;
-import by.kovalski.alexsystem.entity.Lesson;
 import by.kovalski.alexsystem.entity.Status;
 import by.kovalski.alexsystem.exception.ServiceException;
 import by.kovalski.alexsystem.repository.CourseRepository;
@@ -68,7 +67,7 @@ public class LecturerServiceImpl implements LecturerService {
     Lecturer lecturer = lecturerRepository.findById(id).orElseThrow(() -> new ServiceException("Lecturer with id " + id
             + " not exists"));
 
-    if (lecturer.getLessons().stream().anyMatch(l -> l.getBegin().isAfter(LocalDateTime.now()))) {
+    if (lecturer.getSchedules().stream().anyMatch(l -> l.getBegin().isAfter(LocalDateTime.now()))) {
       throw new ServiceException("Impossible delete: lecturer has future lessons");
     }
 
@@ -116,7 +115,7 @@ public class LecturerServiceImpl implements LecturerService {
     ServiceUtil.validateAbstractPerson(lecturer);
 
     if (lecturer.getStatus() == Status.NON_ACTIVE &&
-            lecturer.getLessons().stream().anyMatch(l -> l.getBegin().isAfter(LocalDateTime.now()))) {
+            lecturer.getSchedules().stream().anyMatch(l -> l.getBegin().isAfter(LocalDateTime.now()))) {
       throw new ServiceException("Can't do this lecturer non active: lecturer has future lessons");
     }
   }

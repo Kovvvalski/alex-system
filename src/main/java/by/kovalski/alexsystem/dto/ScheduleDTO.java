@@ -1,14 +1,15 @@
 package by.kovalski.alexsystem.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import by.kovalski.alexsystem.entity.Group;
+import by.kovalski.alexsystem.entity.Lecturer;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -16,12 +17,11 @@ import java.util.Set;
 @Getter
 @Setter
 public class ScheduleDTO {
-  private String groupName;
-  private Long lecturerId;
-  private LocalDate startDate;
-  private LocalDate endDate;
-  private Periodicity periodicity;
-  private Set<DayOfWeek> daysOfWeek;
-  private LocalTime begin;
-  private int duration;
+    private Long id;
+    private String name;
+    private Map<DayOfWeek, LocalTime> schedule;
+    private LocalDate scheduleStart;
+    private LocalDate scheduleEnd;
+    private Long groupId;
+    private Long lecturerId;
 }

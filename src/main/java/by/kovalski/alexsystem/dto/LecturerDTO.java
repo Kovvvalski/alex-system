@@ -16,11 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 public class LecturerDTO extends AbstractPersonDTO {
 
-  private List<String> courses;
+    private List<Long> courseIds;
 
-  public LecturerDTO(Lecturer lecturer) {
-    super(lecturer.getId(), lecturer.getFirstName(), lecturer.getSecondName(), lecturer.getThirdName(), lecturer.getTelephoneNumber(),
-            lecturer.getEmail(), lecturer.getStatus());
-    this.courses = lecturer.getCourses().stream().map(Course::getName).toList();
-  }
+    public LecturerDTO(Lecturer lecturer) {
+        super(lecturer.getId(), lecturer.getFirstName(), lecturer.getSecondName(), lecturer.getThirdName(), lecturer.getTelephoneNumber(),
+                lecturer.getEmail(), lecturer.getStatus());
+        this.courseIds = lecturer.getCourses().stream().map(Course::getId).toList();
+    }
 }
